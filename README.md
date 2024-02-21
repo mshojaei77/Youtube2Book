@@ -4,7 +4,7 @@ YTplaylist2Book is a Python script that converts a YouTube playlist into a PDF d
 
 ## Features
 
-- Downloads videos from a YouTube playlist
+- Access videos from a YouTube playlist
 - Extracts transcripts from each video
 - Creates a PDF document with the playlist's information
 - Includes video thumbnails in the PDF
@@ -33,7 +33,7 @@ python YTplaylist2Book.py
 
 2. When prompted, enter the URL of the YouTube playlist you want to convert to a PDF.
 
-3. The script will download the videos, extract their transcripts, and create a PDF document with the playlist's information.
+3. The script will extract their transcripts, and create a PDF document with the playlist's information.
 
 ## Contributing
 
@@ -45,7 +45,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Acknowledgments
 
-- The `pytube` library for simplifying YouTube video downloads.
+- The `pytube` library for simplifying YouTube video info.
 - The `youtube_transcript_api` library for fetching video transcripts.
 - The `fpdf` library for creating PDF documents.
 - The `requests` library for downloading thumbnails.

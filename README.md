@@ -3,9 +3,8 @@
 YTplaylist2Book is a Python script that converts a YouTube playlist into a PDF document. It downloads the videos, extracts their transcripts, and includes them in the PDF along with the video titles and descriptions.
 
 ## Demo
-
-Playlist: [LangChain How to and guides by Sam Witteveen](https://www.youtube.com/watch?v=J_0qvRt4LNk&list=PL8motc6AQftk1Bs42EW45kwYbyJ4jOdiZ)
-Pdf book: [LangChain How to and guides.pdf](https://github.com/mshojaei77/Youtube2Book/blob/main/LangChain%20How%20to%20and%20guides.pdf)
+![image](https://github.com/mshojaei77/Youtube2Book/assets/76538971/2894dda3-0fa9-47dc-a4fa-cc10fef1dbe7)
+for example here is the [ouput pdf file](https://github.com/mshojaei77/Youtube2Book/blob/main/Let's%20build%20the%20GPT%20Tokenizer.pdf) for [this video](https://www.youtube.com/watch?v=zduSFxRajkE&t=4s)(Let's build the GPT Tokenizer) from Andrej Karpathy
 
 ## Features
 

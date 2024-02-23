@@ -1,10 +1,7 @@
-# YouTube Playlist to Book
+# YouTube Playlist to PDF Converter
 
-YTplaylist2Book is a Python script that converts a YouTube playlist into a PDF document. It downloads the videos, extracts their transcripts, and includes them in the PDF along with the video titles and descriptions.
-
-## Demo
-![image](https://github.com/mshojaei77/Youtube2Book/assets/76538971/2894dda3-0fa9-47dc-a4fa-cc10fef1dbe7)
-for example here is the [ouput pdf file](https://github.com/mshojaei77/Youtube2Book/blob/main/Let's%20build%20the%20GPT%20Tokenizer.pdf) for [this video](https://www.youtube.com/watch?v=zduSFxRajkE&t=4s)(Let's build the GPT Tokenizer) from Andrej Karpathy
+## Overview
+This application allows you to convert YouTube playlists or video URLs into a comprehensive PDF document. The PDF includes information such as video titles, descriptions, and transcripts.
 
 ## Features
 
@@ -14,42 +11,48 @@ for example here is the [ouput pdf file](https://github.com/mshojaei77/Youtube2B
 - Includes video thumbnails in the PDF
 - Logs progress and errors for easy troubleshooting
 
-## Prerequisites
+## Demo
+![Application Demo](https://github.com/mshojaei77/Youtube2Book/assets/76538971/2894dda3-0fa9-47dc-a4fa-cc10fef1dbe7)
 
-- Python  3.x installed on your machine
-- Required Python libraries: `pytube`, `youtube_transcript_api`, `fpdf`, and `requests`
+For example, you can view the [output PDF file](https://github.com/mshojaei77/Youtube2Book/blob/main/Let's%20build%20the%20GPT%20Tokenizer.pdf) generated for [this video](https://www.youtube.com/watch?v=zduSFxRajkE&t=4s) ("Let's build the GPT Tokenizer") from Andrej Karpathy.
 
-## Installation
+## How to Use
+1. Download the [Windows version](https://github.com/mshojaei77/Youtube2Book/releases/download/GUI/YTplaylist2Book.exe).
+2. Run the executable file.
+3. Enter the YouTube playlist or video URL.
+4. Click on the "Convert to Book" button.
+5. Wait for the process to complete.
+6. Save the generated PDF.
 
-To install the required Python libraries, run the following command:
+## Dependencies
+- PySide6
+- requests
+- PIL
+- io
+- pytube
+- youtube_transcript_api
+- fpdf
 
+## Code Structure
+The application is built using Python and PySide6. The main functionalities are divided into two classes: `Worker` and `PlaylistToPDFApp`. 
+
+- `Worker`: This class is responsible for fetching information, creating a PDF, and managing the conversion process in a separate thread.
+
+- `PlaylistToPDFApp`: This class handles the GUI components, user input, and interaction with the `Worker` class.
+
+## How to Build
+Ensure you have Python installed, and install the required dependencies using:
 ```bash
-pip install pytube youtube_transcript_api fpdf requests
+pip install PySide6 requests Pillow pytube youtube_transcript_api fpdf
 ```
 
-## Usage
-
-1. Run the script from the command line:
-
+Run the application using:
 ```bash
-python YTplaylist2Book.py
+python your_script_name.py
 ```
 
-2. When prompted, enter the URL of the YouTube playlist you want to convert to a PDF.
+## Notes
+- The application uses external libraries to fetch video details, download thumbnails, and retrieve video transcripts.
+- Thumbnails are stored in a 'thumbnails' directory.
+- Transcript generation is handled by the YouTubeTranscriptApi.
 
-3. The script will extract their transcripts, and create a PDF document with the playlist's information.
-
-## Contributing
-
-Contributions are welcome! If you'd like to contribute, please fork the repository and create a pull request with your changes.
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
-## Acknowledgments
-
-- The `pytube` library for simplifying YouTube video info.
-- The `youtube_transcript_api` library for fetching video transcripts.
-- The `fpdf` library for creating PDF documents.
-- The `requests` library for downloading thumbnails.

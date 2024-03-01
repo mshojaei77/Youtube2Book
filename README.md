@@ -2,7 +2,7 @@
 
 ## Overview
 
-The YouTube Transcript Extractor is a dual-platform application designed to extract transcripts from YouTube videos, providing both a web-based interface through Streamlit and a desktop application built with PySide6. This tool is useful for individuals who need to access the content of YouTube videos without watching them or for those who wish to analyze the content programmatically.
+The YouTube Transcript Extractor is an application designed to extract transcripts from YouTube videos, providing both a web-based interface through Streamlit and a desktop application built with PySide6. This tool is useful for individuals who need to access the content of YouTube videos without watching them or for those who wish to analyze the content programmatically.
 
 ## Features
 

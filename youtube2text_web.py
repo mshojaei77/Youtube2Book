@@ -1,3 +1,4 @@
+
 import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi
 from yt_dlp import YoutubeDL
@@ -27,7 +28,7 @@ def get_video_info(video_url):
         info = yt.extract_info(video_url, download=False)
         return info.get("title", ""), info.get("description", ""), info.get("thumbnails", [])[-1]["url"]
 
-st.title('YouTube Transcript Extractor')
+st.title('🎥 YouTube Transcript Extractor')
 
 video_url_input = st.text_input("Enter YouTube Video URL", "")
 submit_button = st.button("Extract Transcript")
@@ -41,9 +42,14 @@ if submit_button and video_url_input:
         with st.spinner('Fetching transcript...'):
             transcript_text = fetch_transcript(video_id)
 
-        if video_title: st.markdown(f"## [{video_title}]({video_url})")
-        if video_thumbnail: st.image(video_thumbnail, caption="Video Thumbnail", use_column_width=True)
-        if video_description: st.markdown(f" {video_description}")
+        # Display video title and thumbnail in the main area
+        if video_title: st.markdown(f"## {video_title}")
+        # Display video description in the sidebar
+        with st.sidebar:
+            if video_title: st.markdown(f"### [{video_title}]({video_url})")
+            if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
+            if video_description: st.markdown(f" {video_description}")
+
         st.markdown(f"``` {transcript_text} ```")
 
     except Exception as e:

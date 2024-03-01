@@ -1,5 +1,6 @@
 import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi
+from yt_dlp import YoutubeDL
 import re
 
 def extract_video_id(video_url):
@@ -20,10 +21,11 @@ def fetch_transcript(video_id):
         st.error(f"Failed to fetch transcript: {e}")
         st.stop()
 
-def get_video_thumbnail(video_id):
-    # Construct the thumbnail URL directly
-    thumbnail_url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
-    return thumbnail_url
+def get_video_info(video_url):
+    opts = dict()
+    with YoutubeDL(opts) as yt:
+        info = yt.extract_info(video_url, download=False)
+        return info.get("title", ""), info.get("description", ""), info.get("thumbnails", [])[-1]["url"]
 
 st.title('YouTube Transcript Extractor')
 
@@ -33,18 +35,16 @@ submit_button = st.button("Extract Transcript")
 if submit_button and video_url_input:
     try:
         video_id = extract_video_id(video_url_input)
-        video_title = f"Video Title Placeholder" # Placeholder for video title
-        video_description = f"Video Description Placeholder" # Placeholder for video description
+        video_title, video_description, video_thumbnail = get_video_info(video_url_input)
         video_url = f"https://www.youtube.com/watch?v={video_id}"
-        video_thumbnail = get_video_thumbnail(video_id)
 
         with st.spinner('Fetching transcript...'):
             transcript_text = fetch_transcript(video_id)
 
-        st.markdown(f"## [{video_title}]({video_url})")
-        st.image(video_thumbnail, caption="Video Thumbnail", use_column_width=True)
-        if video_description: st.markdown(f"### {video_description}")
-        st.markdown(transcript_text)
+        if video_title: st.markdown(f"## [{video_title}]({video_url})")
+        if video_thumbnail: st.image(video_thumbnail, caption="Video Thumbnail", use_column_width=True)
+        if video_description: st.markdown(f" {video_description}")
+        st.markdown(f"``` {transcript_text} ```")
 
     except Exception as e:
         st.error(f"An error occurred: {e}")

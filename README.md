@@ -55,6 +55,7 @@ pip install PySide6 pytube youtube_transcript_api fpdf
 ### PDF Output
 
 The desktop application allows users to generate a PDF report of the extracted transcript. This feature is particularly useful for users who need to share the transcript with others or use it offline.
+[Output Example](https://github.com/mshojaei77/Youtube2Book/blob/main/Let's%20build%20the%20GPT%20Tokenizer.pdf)
 
 ## Usage
 

@@ -1,12 +1,8 @@
-# YouTube Transcript Extractor
+# YouTube Transcript Extractor: Streamlit Web App and PySide6 Desktop App
 
 ## Overview
 
-The YouTube Transcript Extractor is a Streamlit web application designed to extract and display the transcripts of YouTube videos directly within the app. This tool is useful for individuals who need to access the content of YouTube videos without watching them or for those who wish to analyze the content programmatically.
-
-## Demo
-
-You can access a live demo of the YouTube Transcript Extractor at [https://youtube2text.streamlit.app/](https://youtube2text.streamlit.app/).
+The YouTube Transcript Extractor is a dual-platform application designed to extract transcripts from YouTube videos, providing both a web-based interface through Streamlit and a desktop application built with PySide6. This tool is useful for individuals who need to access the content of YouTube videos without watching them or for those who wish to analyze the content programmatically.
 
 ## Features
 
@@ -14,31 +10,25 @@ You can access a live demo of the YouTube Transcript Extractor at [https://youtu
 - **Display Video Details**: Shows the video title, description, and thumbnail.
 - **Markdown Formatting**: Displays the transcript in a structured and readable format using Markdown.
 - **Error Handling**: Provides clear error messages for invalid URLs or videos without transcripts.
+- **Web-Based Interface**: Accessible via web browsers, ideal for users without the need for desktop applications.
+- **Desktop Application**: A standalone Windows application for users who prefer a desktop interface.
+- **PDF Output**: Generates a PDF report of the extracted transcript for offline use or sharing.
 
-## Getting Started
+## Web App
 
-### Prerequisites
+### Demo
 
-Ensure you have Python installed on your system. If not, download and install it from [https://www.python.org/downloads/](https://www.python.org/downloads/).
+You can access a live demo of the YouTube Transcript Extractor at [https://youtube2text.streamlit.app/](https://youtube2text.streamlit.app/).
 
 ### Installation
 
-1. Clone the repository:
+To run the web app locally, ensure you have Python and Streamlit installed. If not, install them using pip:
 
 ```bash
-git clone https://github.com/yourusername/youtube-transcript-extractor.git
-cd youtube-transcript-extractor
+pip install streamlit youtube_transcript_api pytube
 ```
 
-2. Install the required packages:
-
-```bash
-pip install -r requirements.txt
-```
-
-### Running the Application
-
-To start the Streamlit app, run the following command in your terminal:
+Then, clone the repository and run the app:
 
 ```bash
 streamlit run app.py
@@ -46,11 +36,44 @@ streamlit run app.py
 
 This command will launch the app in your default web browser.
 
+## Desktop Application
+
+### Download
+
+For Windows users, a standalone executable is available for download. Simply visit the following link to download the application:
+
+[Download YouTube2Text Desktop Windows App](https://github.com/mshojaei77/Youtube2Book/releases/download/GUI/YTplaylist2Book.exe)
+
+### Installation
+
+If you wish to run the application from source, ensure you have Python installed and then install the required packages using pip:
+
+```bash
+pip install PySide6 pytube youtube_transcript_api fpdf
+```
+
+### PDF Output
+
+The desktop application allows users to generate a PDF report of the extracted transcript. This feature is particularly useful for users who need to share the transcript with others or use it offline.
+
 ## Usage
+
+### Web App
 
 1. Enter the YouTube video URL in the input field.
 2. Click the "Extract Transcript" button.
 3. The app will fetch the video details and transcript, displaying them in a structured format.
+
+### Desktop Application
+
+1. Launch the application by running `youtube2text_Desktop.py`.
+2. Enter the YouTube Playlist or Video URL in the provided field.
+3. Click the "Convert to Book" button to start the conversion process.
+4. Save the generated PDF to your preferred location.
+
+## Development
+
+This application is built using Python, Streamlit for the web app, and PySide6 for the desktop application. It leverages `pytube` for downloading video thumbnails, `youtube_transcript_api` for fetching video transcripts, and `fpdf` for generating PDF documents in the desktop application.
 
 ## Contributing
 
@@ -58,24 +81,12 @@ Contributions are welcome! If you've found a bug or have a feature request, plea
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Streamlit for providing an easy way to build web applications with Python.
-- `youtube_transcript_api` for enabling the extraction of YouTube video transcripts.
-- `pytube` for fetching video details and thumbnails.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
 For any questions, comments, or suggestions, please feel free to reach out at [your-email@example.com](mailto:your-email@example.com).
 
-## Future Enhancements
-
-- Support for more languages and transcript formats.
-- Improved error handling and user interface.
-- Integration with other video platforms.
-
 ---
 
-This README is designed to provide a comprehensive overview of the YouTube Transcript Extractor application, including installation instructions, usage details, and information on contributing to the project.
+The YouTube Transcript Extractor is a versatile tool that bridges the gap between online content and offline accessibility, making YouTube content more accessible for those who prefer to read in a more traditional format. Whether you're a developer looking to integrate YouTube content analysis into your projects or a user seeking a convenient way to access YouTube video transcripts, this tool is designed to meet your needs.

@@ -1,4 +1,4 @@
-# YouTube Transcript Extractor: Streamlit Web App and PySide6 Desktop App
+# YouTube Transcript Extractor
 
 ## Overview
 

@@ -1,2 +1,3 @@
-streamlit==1.2.0
-youtube_transcript_api==0.4.1
+streamlit==latest
+youtube_transcript_api==latest
+yt-dlp==latest

@@ -1,6 +1,5 @@
 import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi
-from pytube import YouTube
 import re
 
 def extract_video_id(video_url):
@@ -21,10 +20,10 @@ def fetch_transcript(video_id):
         st.error(f"Failed to fetch transcript: {e}")
         st.stop()
 
-def get_video_thumbnail(video_url):
-    video_id = extract_video_id(video_url)
-    yt = YouTube(f'https://www.youtube.com/watch?v={video_id}')
-    return yt.thumbnail_url
+def get_video_thumbnail(video_id):
+    # Construct the thumbnail URL directly
+    thumbnail_url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+    return thumbnail_url
 
 st.title('YouTube Transcript Extractor')
 
@@ -34,11 +33,10 @@ submit_button = st.button("Extract Transcript")
 if submit_button and video_url_input:
     try:
         video_id = extract_video_id(video_url_input)
-        yt = YouTube(video_url_input)
-        video_title = yt.title
-        video_description = yt.description
-        video_url = yt.watch_url
-        video_thumbnail = get_video_thumbnail(video_url)
+        video_title = f"Video Title Placeholder" # Placeholder for video title
+        video_description = f"Video Description Placeholder" # Placeholder for video description
+        video_url = f"https://www.youtube.com/watch?v={video_id}"
+        video_thumbnail = get_video_thumbnail(video_id)
 
         with st.spinner('Fetching transcript...'):
             transcript_text = fetch_transcript(video_id)

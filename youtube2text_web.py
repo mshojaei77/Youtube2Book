@@ -72,7 +72,7 @@ if submit_button and video_url_input:
         else:
             # Display original transcript
             st.markdown("### Original Transcript (Extracted from Subtitles)")
-            st.markdown(f" {transcript_text} ")
+            st.markdown(f" ``` {transcript_text} ```")
 
         # Display video title and thumbnail in the main area
         if video_title: st.markdown(f"## {video_title}")

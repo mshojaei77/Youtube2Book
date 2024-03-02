@@ -59,7 +59,6 @@ if submit_button and video_url_input:
             with st.spinner('Translating to Persian...'):
                 # Translate to Persian
                 translated_text = translate_to_persian(transcript_text)
-                st.markdown("### Persian Transcript (Translated by Google Translate)")
                 st.markdown(f'''
                 <div dir="rtl" style="text-align: right;">
                     <p style="margin-bottom: 0.5rem;"> </p>

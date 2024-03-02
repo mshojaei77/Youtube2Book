@@ -7,6 +7,7 @@ The YouTube Transcript Extractor is an application designed to extract transcrip
 ## Features
 
 - **Extract Transcripts**: Automatically fetches the transcript of a given YouTube video URL.
+- **Translate Transcripts**: Automatically Translate the transcript to Persian Language.
 - **Display Video Details**: Shows the video title, description, and thumbnail.
 - **Markdown Formatting**: Displays the transcript in a structured and readable format using Markdown.
 - **Error Handling**: Provides clear error messages for invalid URLs or videos without transcripts.

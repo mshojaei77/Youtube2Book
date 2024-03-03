@@ -1,5 +1,5 @@
+langchain-g4f
+g4f
 streamlit
 youtube_transcript_api
 yt-dlp
-g4f 
-git+https://github.com/MIDORIBIN/langchain-gpt4free.git

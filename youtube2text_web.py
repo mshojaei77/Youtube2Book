@@ -68,7 +68,7 @@ if submit_button and video_url_input:
 
         else:
             if video_title: st.markdown(f"## {video_title}")
-            st.markdown(f" ```transcript_text {transcript_text} ``` ")
+            st.markdown(f" ``` \n{transcript_text}\n ``` ")
         
         with st.sidebar:
             st.markdown(f"## Video Information: ")

@@ -14,7 +14,7 @@ def extract_video_id(video_url):
 def fetch_transcript(video_id):
     try:
         transcript = YouTubeTranscriptApi.get_transcript(video_id)
-        return "\n".join(entry['text'] for entry in transcript)
+        return " ".join(entry['text'] for entry in transcript)
     except YouTubeTranscriptApi.NoTranscriptFound:
         st.error("No transcript found for this video.")
         st.stop()

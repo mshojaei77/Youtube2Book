@@ -1,4 +1,3 @@
-langchain-g4f
 g4f
 streamlit
 youtube_transcript_api

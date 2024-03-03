@@ -76,7 +76,7 @@ def structure_with_ai(transcript_text: str) -> str:
               '''
     response = g4f.ChatCompletion.create(
         model= "",
-        provider=g4f.Provider.Gemini,
+        provider=g4f.Provider.FreeChatgpt,
         messages=[
             {"role": "user", "content": request}
         ]

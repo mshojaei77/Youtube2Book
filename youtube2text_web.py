@@ -3,10 +3,6 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from yt_dlp import YoutubeDL
 import re
-from g4f import Provider, models
-from langchain.llms.base import LLM
-from langchain_g4f import G4FLLM
-
 
 # Include the Vazirmatn font via CDN
 st.markdown(
@@ -18,9 +14,8 @@ st.markdown(
 
 st.title('🎥 YouTube Transcript Extractor')
 
-transcript_extracted = False
-
 def extract_video_id(video_url: str) -> str:
+    """Extracts the video ID from a YouTube URL."""
     pattern = r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})'
     match = re.search(pattern, video_url)
     if match is None:
@@ -29,6 +24,7 @@ def extract_video_id(video_url: str) -> str:
     return match.group(6)
 
 def fetch_transcript(video_id: str) -> str:
+    """Fetches the transcript of a YouTube video and formats it using TextFormatter."""
     try:
         transcript = YouTubeTranscriptApi.get_transcript(video_id)
         formatter = TextFormatter()
@@ -42,6 +38,7 @@ def fetch_transcript(video_id: str) -> str:
         return None
 
 def translate_to_persian(video_id: str) -> str:
+    """Translates the transcript to Persian using YouTube Transcript API and formats it using TextFormatter."""
     try:
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
         transcript = transcript_list.find_transcript(['en'])
@@ -54,6 +51,7 @@ def translate_to_persian(video_id: str) -> str:
         return None
 
 def get_video_info(video_url: str) -> tuple:
+    """Extracts video information using yt-dlp."""
     opts = dict()
     with YoutubeDL(opts) as yt:
         info = yt.extract_info(video_url, download=False)
@@ -63,29 +61,8 @@ def get_video_info(video_url: str) -> tuple:
         thumbnail_url = thumbnails[-1]["url"] if thumbnails else None
         return title, description, thumbnail_url
 
-def structure_with_ai(transcript_text: str) -> str:
-    llm: LLM = G4FLLM(
-        model=models.gpt_4,
-        provider=Provider.Gemini,
-    )
-
-    request = f''' 
-    We are seeking a professional transformation of a YouTube video transcript into a structured and teaching-oriented format, utilizing Markdown for its readability and structure. The transcript content to be transformed is as follows:
-
-    ```
-    {transcript_text}
-    ```
-
-    Please ensure the transformation adheres to a teaching tone, enhancing clarity and engagement for the audience. The final output should be neatly formatted in Markdown, preserving the original content's meaning while enhancing its presentation for educational purposes.
-
-    Your assistance in this matter is greatly appreciated.
-              '''
-
-    return llm(request)
-
 video_url_input = st.text_input("Enter YouTube Video URL", "")
-structure_with_ai_checkbox = st.checkbox("✨ Structure to Markdown format with AI")
-translate_to_persian_checkbox = st.checkbox("🌏 Extract Persian Transcript")
+translate_to_persian_checkbox = st.checkbox("Translate Transcript to Persian using YouTube Transcript API")
 submit_button = st.button("Extract Transcript")
 
 if submit_button and video_url_input:
@@ -98,10 +75,8 @@ if submit_button and video_url_input:
 
             with st.spinner('Fetching transcript...'):
                 transcript_text = fetch_transcript(video_id)
-                if transcript_text:
-                    transcript_extracted = True
 
-            if translate_to_persian_checkbox and transcript_text:
+            if translate_to_persian_checkbox:
                 with st.spinner('Translating to Persian...'):
                     translated_text = translate_to_persian(video_id)
                     st.markdown(f'''
@@ -113,10 +88,6 @@ if submit_button and video_url_input:
                     </div>
                     ''', unsafe_allow_html=True)
 
-            if structure_with_ai_checkbox and transcript_text:
-                with st.spinner('Structuring Using Gemini...'):
-                    structured_transcript = structure_with_ai(transcript_text)
-                    st.markdown(structured_transcript)
             else:
                 if video_title: st.markdown(f"## {video_title}")
                 st.markdown(f" {transcript_text} ")
@@ -132,3 +103,13 @@ if submit_button and video_url_input:
     else:
         st.error("Please enter a valid YouTube video URL.")
 
+st.markdown("""
+<div class="footer">
+    <p>Powered by: YouTube's Automatic Speech Recognition (ASR) technology.</p>
+</div>
+""", unsafe_allow_html=True)
+st.markdown("""
+<div class="footer">
+    <p>Developer: <a href="https://github.com/mshojaei77" target="_blank">M.Shojaei</a></p>
+</div>
+""", unsafe_allow_html=True)

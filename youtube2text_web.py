@@ -14,7 +14,7 @@ def extract_video_id(video_url):
 def fetch_transcript(video_id):
     try:
         transcript = YouTubeTranscriptApi.get_transcript(video_id)
-        return " ".join(entry['text'] for entry in transcript)
+        return "  ".join(entry['text'] for entry in transcript)
     except YouTubeTranscriptApi.NoTranscriptFound:
         st.error("No transcript found for this video.")
         st.stop()
@@ -54,10 +54,8 @@ if submit_button and video_url_input:
         with st.spinner('Fetching transcript...'):
             transcript_text = fetch_transcript(video_id)
 
-        # Decide whether to translate or display original transcript
         if translate_to_persian_checkbox:
             with st.spinner('Translating to Persian...'):
-                # Translate to Persian
                 translated_text = translate_to_persian(transcript_text)
                 st.markdown(f'''
                 <div dir="rtl" style="text-align: right;">
@@ -69,11 +67,9 @@ if submit_button and video_url_input:
                 ''', unsafe_allow_html=True)
 
         else:
+            if video_title: st.markdown(f"## {video_title}")
             st.markdown(f" ```transcript_text {transcript_text} ``` ")
-
-        # Display video title and thumbnail in the main area
-        if video_title: st.markdown(f"## {video_title}")
-        # Display video description in the sidebar
+        
         with st.sidebar:
             st.markdown(f"## Video Information: ")
             if video_title: st.markdown(f"### [{video_title}]({video_url})")

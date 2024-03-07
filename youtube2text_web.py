@@ -75,8 +75,7 @@ def structure_with_ai(transcript_text: str) -> str:
     Your assistance in this matter is greatly appreciated.
               '''
     response = g4f.ChatCompletion.create(
-        model= "",
-        provider=g4f.Provider.Bing,
+        model=g4f.models.gpt_4,
         messages=[
             {"role": "user", "content": request}
         ]

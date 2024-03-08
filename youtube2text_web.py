@@ -88,13 +88,9 @@ def structure_with_ai(transcript_text: str) -> str:
 
         5. **Review and Feedback**: Upon completion, review the transformed content to ensure it meets the specified criteria and provide feedback for any necessary modifications. 🔄📢
 
-        ### Final Output Requirements:
-
         Please submit the final, transformed content in Markdown format, adhering strictly to the guidelines outlined. The aim is to produce a comprehensive, engaging, and educational document that effectively communicates the video's content.
 
         Additionally, ensure to correct and complete the transcript text if it contains errors, without omitting or altering important information. You may add code examples and additional context as long as it does not compromise the original meaning of the content.
-
-        ### Emoji and Table Usage Guidelines:
 
         - **Emoji Usage**: Emojis are not just decorative; they add a layer of engagement and help convey emotions and semantic meanings. Use emojis to signify the role being described in the heading or to emphasize key points within the text. Emojis can be added by copying and pasting directly from sources like Emojipedia or by using emoji shortcodes. For example, `:joy:` for joy or `:tent:` for camping [0][1].
 

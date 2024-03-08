@@ -62,8 +62,7 @@ def get_video_info(video_url: str) -> tuple:
         return title, description, thumbnail_url
 
 def structure_with_ai(transcript_text: str) -> str:
-
-    request = f''' 
+    request = f'''
     We are seeking a professional transformation of a YouTube video transcript into a structured and teaching-oriented format, utilizing Markdown for its readability and structure. The transcript content to be transformed is as follows:
 
     ```
@@ -74,15 +73,28 @@ def structure_with_ai(transcript_text: str) -> str:
 
     Your assistance in this matter is greatly appreciated.
               '''
-    response = g4f.ChatCompletion.create(
-        model=g4f.models.gpt_4,
-        messages=[
-            {"role": "user", "content": request}
-        ]
-    )
-    messages = "".join(response)
-    
-    return messages
+
+    # Define the list of providers
+    providers = [g4f.Provider.FreeChatgpt, g4f.Provider.Liaobots, g4f.Provider.Koala, g4f.Provider.Llama2, g4f.Provider.ChatForAi]
+
+    for prv in providers:
+        try:
+            response = g4f.ChatCompletion.create(
+                model=g4f.models.gpt_4,
+                provider=prv,
+                messages=[
+                    {"role": "user", "content": request}
+                ]
+            )
+            messages = "".join(response)
+            return messages  # Return the response if successful
+        except Exception as e:
+            st.warning(f"Error with provider {prv}: {e}")
+            continue  # Try the next provider
+
+    # If all providers fail, display an error message
+    st.error("Failed to structure the transcript with all providers.")
+    return None
 
 video_url_input = st.text_input("Enter YouTube Video URL", "")
 structure_with_ai_checkbox = st.checkbox("✨ Structure to Markdown format with AI")
@@ -115,7 +127,7 @@ if submit_button and video_url_input:
                     ''', unsafe_allow_html=True)
 
             if structure_with_ai_checkbox and transcript_text:
-                with st.spinner('Structuring Using Gemini...'):
+                with st.spinner('Structuring Using AI... (may take a while)'):
                     structured_transcript = structure_with_ai(transcript_text)
                     st.markdown(structured_transcript)
             else:

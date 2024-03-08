@@ -65,16 +65,15 @@ def structure_with_ai(transcript_text: str) -> str:
     request = f'''
         To transform the provided YouTube video transcript and description into a structured, engaging, and educational format using Markdown, with a strong emphasis on enhancing readability, engagement, and educational value through the strategic use of emojis and tables, follow these instructions:
 
-        ### Transcript:
-
-        ```
-        {transcript_text}
-        ```
-
         ### Video Description:
 
         ```
         {video_description}
+        ```
+        ### Video Transcript:
+
+        ```
+        {transcript_text}
         ```
 
         ### Transformation Instructions:

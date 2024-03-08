@@ -63,7 +63,7 @@ def get_video_info(video_url: str) -> tuple:
 
 def structure_with_ai(transcript_text: str) -> str:
     request = f'''
-        To transform the provided YouTube video transcript and description into a structured, engaging, and educational format using Markdown, adhering to the guidelines for enhancing readability and engagement, follow these instructions:
+        To transform the provided YouTube video transcript and description into a structured, engaging, and educational format using Markdown, with a strong emphasis on enhancing readability, engagement, and educational value through the strategic use of emojis and tables, follow these instructions:
 
         ### Transcript:
 
@@ -79,15 +79,15 @@ def structure_with_ai(transcript_text: str) -> str:
 
         ### Transformation Instructions:
 
-        1. **Structure and Tone**: Organize the content to align with the video's subject matter, ensuring clarity and engagement. Utilize emojis, tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
+        1. **Structure and Tone**: Organize the content to align with the video's subject matter, ensuring clarity and engagement. Utilize emojis, tables, and code blocks where appropriate to improve the presentation and make the content more dynamic. 📝🚀
 
-        2. **Preservation of Meaning**: Ensure the original content's essence is preserved during the transformation. Avoid omitting or truncating important information.
+        2. **Preservation of Meaning**: Ensure the original content's essence is preserved during the transformation. Avoid omitting or truncating important information. 📖🔍
 
-        3. **Incorporation of Links**: Embed URLs from the video description as clickable links within the Markdown document. Verify all links are functional and correctly formatted.
+        3. **Incorporation of Links**: Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). Verify all links are functional and correctly formatted. 🌐🔗
 
-        4. **Engagement Elements**: Utilize tables and code blocks to highlight key points and illustrate examples. This strategy will help maintain audience interest and facilitate comprehension.
+        4. **Engagement Elements**: Utilize tables and code blocks to highlight key points and illustrate examples. This strategy will help maintain audience interest and facilitate comprehension. 📊💡
 
-        5. **Review and Feedback**: Upon completion, review the transformed content to ensure it meets the specified criteria and provide feedback for any necessary modifications.
+        5. **Review and Feedback**: Upon completion, review the transformed content to ensure it meets the specified criteria and provide feedback for any necessary modifications. 🔄📢
 
         ### Final Output Requirements:
 
@@ -95,12 +95,14 @@ def structure_with_ai(transcript_text: str) -> str:
 
         Additionally, ensure to correct and complete the transcript text if it contains errors, without omitting or altering important information. You may add code examples and additional context as long as it does not compromise the original meaning of the content.
 
-        ### ✅ Emoji and Table Usage Guidelines:
+        ### Emoji and Table Usage Guidelines:
 
-        - **Emoji Usage**: Use clear, widely recognized emojis to enhance the readability and engagement of the content. Avoid ambiguous emojis that might be interpreted differently by various audiences [1].
-        - **Tables**: Incorporate tables to organize information in a structured manner, making it easier for the audience to digest and understand the content. Tables can be used to highlight key points, list steps, or compare different aspects of the video's content.
+        - **Emoji Usage**: Emojis are not just decorative; they add a layer of engagement and help convey emotions and semantic meanings. Use emojis to signify the role being described in the heading or to emphasize key points within the text. Emojis can be added by copying and pasting directly from sources like Emojipedia or by using emoji shortcodes. For example, `:joy:` for joy or `:tent:` for camping [0][1].
 
-        By following these instructions and incorporating emojis and tables, the transformed content will not only be more engaging but also more accessible to a wider audience, ensuring a positive learning experience.
+        - **Tables**: Tables are crucial for organizing information in a structured manner, making it easier for the audience to digest and understand the content. Use tables to highlight key points, list steps, or compare different aspects of the video's content. Tables can significantly enhance the readability and engagement of the content by breaking down complex information into digestible chunks [0].
+
+        By integrating emojis and tables effectively, the transformed content will not only be more engaging but also more accessible to a wider audience, ensuring a positive learning experience.
+            
     '''
 
     # Define the list of providers

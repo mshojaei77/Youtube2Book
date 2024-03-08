@@ -63,16 +63,38 @@ def get_video_info(video_url: str) -> tuple:
 
 def structure_with_ai(transcript_text: str) -> str:
     request = f'''
-    We are seeking a professional transformation of a YouTube video transcript into a structured and teaching-oriented format, utilizing Markdown for its readability and structure. The transcript content to be transformed is as follows:
+        To enhance the readability, engagement, and educational value of the provided YouTube video transcript and description, please reformat the content using Markdown. The goal is to create a structured document that is both informative and accessible to the audience.
 
-    ```
-    {transcript_text}
-    ```
+        ### Transcript:
 
-    Please ensure the transformation adheres to a teaching tone, enhancing clarity and engagement for the audience. The final output should be neatly formatted in Markdown, preserving the original content's meaning while enhancing its presentation for educational purposes.
+        ```
+        {transcript_text}
+        ```
 
-    Your assistance in this matter is greatly appreciated.
-              '''
+        ### Video Description:
+
+        ```
+        {video_description}
+        ```
+
+        ### Instructions for Transformation:
+
+        1. **Structure and Tone**: Organize the content in a manner that aligns with the video's subject matter, ensuring clarity and engagement. Incorporate emojis, tables, and code blocks where relevant to improve the presentation.
+
+        2. **Preservation of Meaning**: Ensure that the original content's essence is preserved during the transformation. Avoid any omission or truncation of crucial information.
+
+        3. **Incorporation of Links**: Embed URLs from the video description as clickable links within the Markdown document. Verify all links are functional and correctly formatted.
+
+        4. **Engagement Elements**: Utilize tables and code blocks to highlight key points and illustrate examples. This strategy will help maintain audience interest and facilitate comprehension.
+
+        5. **Review and Feedback**: Upon completion, review the transformed content to ensure it meets the specified criteria and provide feedback for any necessary modifications.
+
+        ### Final Output Requirements:
+
+        Please submit the final, transformed content in Markdown format, adhering strictly to the guidelines outlined. The aim is to produce a comprehensive, engaging, and educational document that effectively communicates the video's content.
+
+        Additionally, ensure to correct and complete the transcript text if it contains errors, without omitting or altering important information. You may add code examples and additional context as long as it does not compromise the original meaning of the content.
+    '''
 
     # Define the list of providers
     providers = [g4f.Provider.FreeChatgpt, g4f.Provider.Liaobots, g4f.Provider.Koala, g4f.Provider.Llama2, g4f.Provider.ChatForAi]

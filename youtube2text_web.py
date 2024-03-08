@@ -63,7 +63,7 @@ def get_video_info(video_url: str) -> tuple:
 
 def structure_with_ai(transcript_text: str) -> str:
     request = f'''
-        To enhance the readability, engagement, and educational value of the provided YouTube video transcript and description, please reformat the content using Markdown. The goal is to create a structured document that is both informative and accessible to the audience.
+        To transform the provided YouTube video transcript and description into a structured, engaging, and educational format using Markdown, adhering to the guidelines for enhancing readability and engagement, follow these instructions:
 
         ### Transcript:
 
@@ -77,11 +77,11 @@ def structure_with_ai(transcript_text: str) -> str:
         {video_description}
         ```
 
-        ### Instructions for Transformation:
+        ### Transformation Instructions:
 
-        1. **Structure and Tone**: Organize the content in a manner that aligns with the video's subject matter, ensuring clarity and engagement. Incorporate emojis, tables, and code blocks where relevant to improve the presentation.
+        1. **Structure and Tone**: Organize the content to align with the video's subject matter, ensuring clarity and engagement. Utilize emojis, tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
 
-        2. **Preservation of Meaning**: Ensure that the original content's essence is preserved during the transformation. Avoid any omission or truncation of crucial information.
+        2. **Preservation of Meaning**: Ensure the original content's essence is preserved during the transformation. Avoid omitting or truncating important information.
 
         3. **Incorporation of Links**: Embed URLs from the video description as clickable links within the Markdown document. Verify all links are functional and correctly formatted.
 
@@ -94,6 +94,13 @@ def structure_with_ai(transcript_text: str) -> str:
         Please submit the final, transformed content in Markdown format, adhering strictly to the guidelines outlined. The aim is to produce a comprehensive, engaging, and educational document that effectively communicates the video's content.
 
         Additionally, ensure to correct and complete the transcript text if it contains errors, without omitting or altering important information. You may add code examples and additional context as long as it does not compromise the original meaning of the content.
+
+        ### ✅ Emoji and Table Usage Guidelines:
+
+        - **Emoji Usage**: Use clear, widely recognized emojis to enhance the readability and engagement of the content. Avoid ambiguous emojis that might be interpreted differently by various audiences [1].
+        - **Tables**: Incorporate tables to organize information in a structured manner, making it easier for the audience to digest and understand the content. Tables can be used to highlight key points, list steps, or compare different aspects of the video's content.
+
+        By following these instructions and incorporating emojis and tables, the transformed content will not only be more engaging but also more accessible to a wider audience, ensuring a positive learning experience.
     '''
 
     # Define the list of providers

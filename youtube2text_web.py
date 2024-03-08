@@ -92,8 +92,6 @@ def structure_with_ai(transcript_text: str) -> str:
 
         Additionally, ensure to correct and complete the transcript text if it contains errors, without omitting or altering important information. You may add code examples and additional context as long as it does not compromise the original meaning of the content.
 
-        - **Emoji Usage**: Emojis are not just decorative; they add a layer of engagement and help convey emotions and semantic meanings. Use emojis to signify the role being described in the heading or to emphasize key points within the text. Emojis can be added by copying and pasting directly from sources like Emojipedia or by using emoji shortcodes. For example, `:joy:` for joy or `:tent:` for camping [0][1].
-
         - **Tables**: Tables are crucial for organizing information in a structured manner, making it easier for the audience to digest and understand the content. Use tables to highlight key points, list steps, or compare different aspects of the video's content. Tables can significantly enhance the readability and engagement of the content by breaking down complex information into digestible chunks [0].
 
         By integrating emojis and tables effectively, the transformed content will not only be more engaging but also more accessible to a wider audience, ensuring a positive learning experience.

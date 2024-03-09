@@ -65,22 +65,23 @@ def get_video_info(video_url: str) -> tuple:
 
 def structure_with_ai(transcript_text: str, video_description: str) -> str: 
     request = f'''
-transform the provided YouTube video transcript and description into a structured, engaging, and educational format using Markdown:
+read following YouTube Video Transcript and explain it to me in engaging tone, format the output using Markdown also use video description to understand the video better:
 
-        **Video Description:**
-            ```
-            {video_description}
-            ```Description
-        **Video Transcript:**
-            ```Transcript
+        
+            **Video Transcript:**
+            ```transcript
             {transcript_text}
             ```
+            **Video Description:**
+            ```description
+            {video_description}
+            ```
         
-- Expand the content to align with the video's subject matter. Utilize emojis, tables, and code blocks where appropriate to improve the presentation and make the content more dynamic. aldo Avoid omitting or truncating important information. 
-
+- please Expand and Complete the content to a full tutorial of the video's subject matter. Utilize emojis, tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
+- also make sure all of transcript and video purpose will be covered.
 - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). 
-
-- Additionally, ensure to correct and complete the transcript text if it contains grammar issues or anything wrong, You may add examples and additional context from your own knowledge.            
+- Additionally, ensure to correct and complete the transcript text if it contains grammar issues or anything wrong, You should add examples and additional context from your own knowledge.
+- the final output most be a clean and engaging Markdown.
     ''' 
 
 

@@ -63,33 +63,27 @@ def get_video_info(video_url: str) -> tuple:
         thumbnail_url = thumbnails[-1]["url"] if thumbnails else None
         return title, description, thumbnail_url
 
-def structure_with_ai(transcript_text: str) -> str:
+def structure_with_ai(transcript_text: str, video_description: str) -> str: 
     request = f'''
-        transform the provided YouTube video transcript and description into a structured, engaging, and educational format using Markdown, with a strong emphasis on enhancing readability, engagement, and educational value through the strategic use of emojis and tables:
+transform the provided YouTube video transcript and description into a structured, engaging, and educational format using Markdown:
 
-        ### Video Description:
+        **Video Description:**
+            ```
+            {video_description}
+            ```Description
+        **Video Transcript:**
+            ```Transcript
+            {transcript_text}
+            ```
+        
+- Expand the content to align with the video's subject matter. Utilize emojis, tables, and code blocks where appropriate to improve the presentation and make the content more dynamic. aldo Avoid omitting or truncating important information. 
 
-        ```
-        {video_description}
-        ```
-        ### Video Transcript:
+- Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). 
 
-        ```
-        {transcript_text}
-        ```
+- Additionally, ensure to correct and complete the transcript text if it contains grammar issues or anything wrong, You may add examples and additional context from your own knowledge.            
+    ''' 
 
 
-        - organize the content to align with the video's subject matter, ensuring clarity and engagement. Utilize emojis, tables, and code blocks where appropriate to improve the presentation and make the content more dynamic. 📝🚀
-
-        - Ensure the original content's essence is preserved during the transformation. Avoid omitting or truncating important information. 📖🔍
-
-        - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). Verify all links are functional and correctly formatted. 🌐🔗
-
-       - Utilize tables and code blocks to highlight key points and illustrate examples. This strategy will help maintain audience interest and facilitate comprehension. 📊💡
-        - **Tables**: Tables are crucial for organizing information in a structured manner, making it easier for the audience to digest and understand the content. Use tables to highlight key points, list steps, or compare different aspects of the video's content. Tables can significantly enhance the readability and engagement of the content by breaking down complex information into digestible chunks [0].
-
-        Additionally, ensure to correct and complete the transcript text if it contains grammar issues or anything wrong, without omitting or altering important information. You may add examples and additional context from your own knowledge.            
-    '''
 
     providers = [g4f.Provider.FreeChatgpt, g4f.Provider.Liaobots, g4f.Provider.Koala, g4f.Provider.Llama2, g4f.Provider.ChatForAi]
 
@@ -170,7 +164,7 @@ if submit_button and video_url_input:
 
             if structure_with_ai_checkbox and transcript_text:
                 with st.spinner('Structuring Using AI... (may take a while)'):
-                    structured_transcript = structure_with_ai(transcript_text)
+                    structured_transcript = structure_with_ai(transcript_text, video_description)
                     structured_bytes = structured_transcript.encode('utf-8')
                     st.download_button(
                         label="Download Markdown",

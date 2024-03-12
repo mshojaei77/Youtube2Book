@@ -1,15 +1,12 @@
-Cover:
-### [Book cover design to be inserted here]
+[Book cover design to be inserted here]
 
-
-Title:
 # Mastering Retrieval and Meta-generation with Lang Chain and Llama Index
 
 ## By [Youtuber name to be inserted here]
 
 ### Published by [Publisher name to be inserted here] 
 
-Copyright Page:
+
 **Copyright © [Publish Year to be inserted here] by [Youtuber name to be inserted here]**
 
 All rights reserved. No part of this book may be reproduced or used in any manner without written permission from the publisher, except for the use of quotations in a book review.
@@ -18,7 +15,7 @@ All rights reserved. No part of this book may be reproduced or used in any manne
 
 **ISBN: [ISBN Number to be inserted here]**
 
-Dedication:
+Dedication: 
 [it's personal , most be manually entered by creator ]
 
 Epigraph:

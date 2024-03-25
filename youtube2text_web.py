@@ -70,19 +70,12 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
         base_url="https://openrouter.ai/api/v1",
         api_key=OPENROUTER_API_KEY,
     )
-
-    if client is None:
-        print("Client is None. Check your API key and base URL.")
-    else:
-        completion = client.chat.completions.create(
+    completion = client.chat.completions.create(
             model="openrouter/auto",
             messages=[{ "role": "user", "content": prompt}]
         )
+    return completion #.choices[0].message.content
 
-        if completion.choices[0].message.content:
-            return result
-        else:
-            print("No respond from AI.")
 
 
 

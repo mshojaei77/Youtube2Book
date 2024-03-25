@@ -3,12 +3,11 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from yt_dlp import YoutubeDL
 import re
-import time
-import requests
-import json
+from openai import OpenAI
 
 
-OPENROUTER_API_KEY =st.secrets["api_key"]
+
+OPENROUTER_API_KEY =st.secrets["api_key "]
 
 st.markdown(
     """
@@ -54,35 +53,40 @@ def get_video_info(video_url: str) -> tuple:
 
 def structure_with_ai(transcript_text: str, video_description: str) -> str:
     prompt = f'''
-  rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
+    rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
 
-    here is the **Video Transcript**:
-    """{transcript_text}"""
-  
-    here is the **Video Description**:
-    {video_description}
+        here is the **Video Transcript**:
+        """{transcript_text}"""
+    
+        here is the **Video Description**:
+        {video_description}
 
-  - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
-  - Make sure all of transcript and video purpose will be covered.
-  - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
-  - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
-'''
+    - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
+    - Make sure all of transcript and video purpose will be covered.
+    - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
+    - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
+    '''
+    # gets API Key from environment variable OPENAI_API_KEY
+    client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=OPENROUTER_API_KEY,
+    )
 
-    response = requests.post(
-        url="https://openrouter.ai/api/v1/chat/completions",
-        headers={
-          "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-          "HTTP-Referer": "https://youtube2text.streamlit.app/",
-          "X-Title": "YouTube Smart Transcriptor'",
+    completion = client.chat.completions.create(
+    extra_headers={
+        "HTTP-Referer": 'https://youtube2text.streamlit.app', 
+        "X-Title": 'YouTube Smart Transcriptor', 
+    },
+    model="openrouter/auto",
+    messages=[
+        {
+        "role": "user",
+        "content":prompt,
         },
-        data=json.dumps({
-          "model": "openrouter/auto	",
-          "messages": [
-            {"role": "user", "content": prompt}
-          ]
-        })
-      )
-    return response
+    ],
+    )
+    result = completion.choices[0].message.content
+    return result
 
 
 
@@ -108,7 +112,7 @@ if submit_button and video_url_input:
             if structure_with_ai_checkbox and transcript_text:
                 with st.spinner('Structuring Using AI... (may take a while)'):
                     structured_transcript = structure_with_ai(transcript_text, video_description)
-                    st.markdown(f" {structured_transcript} ")
+                    st.markdown(structured_transcript)
             else:
                 if video_title: st.markdown(f"## {video_title}")
                 st.markdown(f" {transcript_text} ")

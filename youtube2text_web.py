@@ -149,13 +149,15 @@ if submit_button and video_url_input:
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
                     st.divider()
-                    if video_title: st.markdown(video_title)
-                    if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
+                    if video_title: st.markdown(f"## {video_title}")
+                    if video_thumbnail: st.image(video_thumbnail, width=600)
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
                 st.divider()
-                if video_title: st.markdown(video_title)
-                if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
+                if video_title: st.markdown(f"## {video_title}")
+                col1, col2, col3 = st.columns(3)
+                with col2:
+                    if video_thumbnail: st.image(video_thumbnail, width=600)
                 st.markdown(f" {transcript_text} ")
                         
             with st.sidebar:

@@ -108,29 +108,12 @@ if submit_button and video_url_input:
             if structure_with_ai_checkbox and transcript_text:
                 with st.spinner('Structuring Using AI... (may take a while)'):
                     structured_transcript = structure_with_ai(transcript_text, video_description)
-                    '''
-                    with st.sidebar:
-                        structured_bytes = structured_transcript.encode('utf-8')
-                        st.download_button(
-                            label="Download Enhanced Transcript",
-                            data=structured_bytes,
-                            file_name='Markdown.txt',
-                            mime='text/plain',
-                        )
-                        st.markdown(structured_transcript)
-                        '''
+                    st.markdown(f" {structured_transcript} ")
             else:
                 if video_title: st.markdown(f"## {video_title}")
                 st.markdown(f" {transcript_text} ")
                         
             with st.sidebar:
-                transcript_bytes = transcript_text.encode('utf-8')
-                st.download_button(
-                        label="Download Base Transcript",
-                        data=transcript_bytes,
-                        file_name='Transcript.txt',
-                        mime='text/plain',
-                )
                 st.markdown(f"## Video Description: ")
                 if video_title: st.markdown(f"### [{video_title}]({video_url})")
                 if video_thumbnail: st.image(video_thumbnail, use_column_width=True)

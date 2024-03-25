@@ -138,7 +138,7 @@ if submit_button and video_url_input:
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
                 if video_title: st.header(video_title, divider='rainbow')
-                if video_thumbnail: st.image(video_thumbnail, width=600)
+                if video_thumbnail: st.image(video_thumbnail,use_column_width="auto",)
                 st.markdown(f" {transcript_text} ")
                       
         except Exception as e:

@@ -67,15 +67,23 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
     - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
     '''
     client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=OPENROUTER_API_KEY,
+        base_url="https://openrouter.ai/api/v1",
+        api_key=OPENROUTER_API_KEY,
     )
-    completion = client.chat.completions.create(
-    model="openrouter/auto",
-    messages=[{ "role": "user", "content": prompt}]
-    )
-    result = completion.choices[0].message.content
-    return result
+
+    if client is None:
+        print("Client is None. Check your API key and base URL.")
+    else:
+        completion = client.chat.completions.create(
+            model="openrouter/auto",
+            messages=[{ "role": "user", "content": prompt}]
+        )
+        
+        if completion is None:
+            print("Completion is None. Check your model and messages.")
+        else:
+            result = completion.choices[0].message.content
+            return result
 
 
 

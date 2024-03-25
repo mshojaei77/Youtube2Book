@@ -73,10 +73,6 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
     )
 
     completion = client.chat.completions.create(
-    extra_headers={
-        "HTTP-Referer": 'https://youtube2text.streamlit.app', 
-        "X-Title": 'YouTube Smart Transcriptor', 
-    },
     model="openrouter/auto",
     messages=[
         {

@@ -1,4 +1,4 @@
-g4f
+openai
 streamlit
 youtube_transcript_api
 yt-dlp

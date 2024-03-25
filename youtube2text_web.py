@@ -13,17 +13,11 @@ st.set_page_config(
     page_title="YouTube Smart Transcription",
     page_icon="🎥",
     layout="wide",
-    initial_sidebar_state="collapsed",
     menu_items={
         'Get Help': 'https://twitter.com/realshojaei',
         'Report a bug': "https://github.com/mshojaei77/Youtube2Book/issues",
     }
 )
-st.title('🎥 YouTube Smart Transcription')
-
-
-
-
 
 transcript_extracted = False
 
@@ -112,6 +106,7 @@ def structure_with_gpt(transcript_text: str, video_description: str, api_key: st
 
 
 with st.sidebar:
+  st.title('🎥 YouTube Smart Transcription')
   video_url_input = st.text_input("Enter YouTube Video URL")
   method = st.radio(
       "Choose the Extraction method",
@@ -154,7 +149,7 @@ if submit_button and video_url_input:
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
                 st.divider()
-                if video_title: st.markdown(f"## {video_title}")
+                if video_title: st.title(video_title)
                 if video_thumbnail: st.image(video_thumbnail, width=600)
                 st.markdown(f" {transcript_text} ")
                       

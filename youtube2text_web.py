@@ -5,10 +5,6 @@ from yt_dlp import YoutubeDL
 import re
 from openai import OpenAI
 
-
-
-OPENROUTER_API_KEY =st.secrets["api_key"]
-
 st.markdown(
     """
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.x/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -51,7 +47,7 @@ def get_video_info(video_url: str) -> tuple:
         thumbnail_url = thumbnails[-1]["url"] if thumbnails else None
         return title, description, thumbnail_url
 
-def structure_with_ai(transcript_text: str, video_description: str) -> str:
+def structure_with_ai(transcript_text: str, video_description: str, api_key: str) -> str:
     prompt = f'''
     rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
 
@@ -68,7 +64,7 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
     '''
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
-        api_key=OPENROUTER_API_KEY,
+        api_key=api_key,
     )
     completion = client.chat.completions.create(
             model="mistralai/mistral-7b-instruct:free",
@@ -99,8 +95,9 @@ if submit_button and video_url_input:
                     transcript_extracted = True
 
             if structure_with_ai_checkbox and transcript_text:
+                OPENAI_API_KEY = st.text_input('OpenAI api key', 'Enter your OpenAI api key')
                 with st.spinner('Structuring Using AI...'):
-                    structured_transcript = structure_with_ai(transcript_text, video_description)
+                    structured_transcript = structure_with_ai(transcript_text, video_description,OPENAI_API_KEY)
                     st.markdown(structured_transcript)
             else:
                 if video_title: st.markdown(f"## {video_title}")

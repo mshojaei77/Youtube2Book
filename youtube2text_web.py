@@ -142,17 +142,17 @@ if submit_button and video_url_input:
                 with st.spinner('Structuring Using Mistral 7b ...'):
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
                     context= "".join(structured_transcript)
-                    st.button("copy to clipboard", on_click=on_copy_click, args=(context))
+                    st.button("copy to clipboard", on_click=on_copy_click, args=(context,))
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
                     context= "".join(structured_transcript)
-                    st.button("copy to clipboard", on_click=on_copy_click, args=(context))
+                    st.button("copy to clipboard", on_click=on_copy_click, args=(context,))
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
                 context= "".join(transcript_text)
-                st.button("copy to clipboard", on_click=on_copy_click, args=(context))
+                st.button("copy to clipboard", on_click=on_copy_click, args=(context,))
                 st.markdown(f" {transcript_text} ")
                         
             with st.sidebar:

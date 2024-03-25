@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="YouTube Smart Transcription",
     page_icon="🎥",
     layout="centered",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
     menu_items={
         'Get Help': 'https://twitter.com/realshojaei',
         'Report a bug': "https://github.com/mshojaei77/Youtube2Book/issues",
@@ -142,8 +142,8 @@ if submit_button and video_url_input:
                 with st.spinner('Structuring Using Mistral 7b ...'):
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
                     st.divider()
-                    if video_title: st.markdown(video_title)
-                    if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
+                    if video_title: st.markdown(f"## {video_title}")
+                    if video_thumbnail: st.image(video_thumbnail, width=600)
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
                 with st.spinner('Structuring Using GPT-4 ...'):

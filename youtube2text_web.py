@@ -69,7 +69,7 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
   response = requests.post(
     url="https://openrouter.ai/api/v1/chat/completions",
     headers={
-      "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+      "Authorization": f"Bearer {OPENROUTER_API_KEY}",
       "HTTP-Referer": "https://youtube2text.streamlit.app/", 
       "X-Title": "YouTube Smart Transcriptor'", 
     },

@@ -1,3 +1,5 @@
+REMOVE TRANSLATE Option fully:
+
 import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
@@ -7,15 +9,16 @@ import g4f
 import time
 from requests.exceptions import HTTPError
 
+
 # Include the Vazirmatn font via CDN
 st.markdown(
     """
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.x/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     """,
     unsafe_allow_html=True
 )
 
-st.title('🎥 YouTube Transcript Extractor')
+st.title('🎥 YouTube Smart Transcriptor')
 
 transcript_extracted = False
 
@@ -52,24 +55,21 @@ def get_video_info(video_url: str) -> tuple:
 
 def structure_with_ai(transcript_text: str, video_description: str) -> str: 
     request = f'''
-read following YouTube Video Transcript and explain it to me in engaging tone, format the output using Markdown also use video description to understand the video better:
+read following YouTube Video Transcript and rewrite it as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
 
-        
-            **Video Transcript:**
-            ```transcript
-            {transcript_text}
-            ```
-            **Video Description:**
-            ```description
-            {video_description}
-            ```
-        
-- please Expand and Complete the content to a full tutorial of the video's subject matter. Utilize emojis, tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
-- also make sure all of transcript and video purpose will be covered.
+
+## Video Description:
+{video_description}
+## Video Transcript:
+{transcript_text}
+
+- Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
+- Make sure all of transcript and video purpose will be covered.
 - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). 
-- Additionally, ensure to correct and complete the transcript text if it contains grammar issues or anything wrong, You should add examples and additional context from your own knowledge.
-- the final output most be a clean and engaging Markdown.
+- Ensure to correct the transcript text if it contains grammar issues or anything wrong.
     ''' 
+
+
 
     providers = [g4f.Provider.FreeChatgpt, g4f.Provider.Liaobots, g4f.Provider.Koala, g4f.Provider.Llama2, g4f.Provider.ChatForAi]
 
@@ -104,3 +104,59 @@ read following YouTube Video Transcript and explain it to me in engaging tone, f
 
     # If all providers fail, display an error message
     st.error("Failed to structure the transcript with all providers.")
+    return None
+
+
+video_url_input = st.text_input("Enter YouTube Video URL", "")
+structure_with_ai_checkbox = st.checkbox("✨Enhance with AI")
+submit_button = st.button("Extract Transcript")
+
+
+    
+if submit_button and video_url_input:
+    video_id = extract_video_id(video_url_input)
+
+    if video_id:
+        try:
+            video_title, video_description, video_thumbnail = get_video_info(video_url_input)
+            video_url = f"https://www.youtube.com/watch?v={video_id}"
+
+            with st.spinner('Fetching transcript...'):
+                transcript_text = fetch_transcript(video_id)
+                if transcript_text:
+                    transcript_extracted = True
+
+            if structure_with_ai_checkbox and transcript_text:
+                with st.spinner('Structuring Using AI... (may take a while)'):
+                    structured_transcript = structure_with_ai(transcript_text, video_description)
+                    structured_bytes = structured_transcript.encode('utf-8')
+                    with st.sidebar:
+                        st.download_button(
+                            label="Download Enhanced Transcript",
+                            data=structured_bytes,
+                            file_name='Markdown.txt',
+                            mime='text/plain',
+                        )
+                        st.markdown(structured_transcript)
+            else:
+                if video_title: st.markdown(f"## {video_title}")
+                st.markdown(f" {transcript_text} ")
+                        
+            with st.sidebar:
+                transcript_bytes = transcript_text.encode('utf-8')
+                st.download_button(
+                        label="Download Base Transcript",
+                        data=transcript_bytes,
+                        file_name='Transcript.txt',
+                        mime='text/plain',
+                )
+                st.markdown(f"## Video Description: ")
+                if video_title: st.markdown(f"### [{video_title}]({video_url})")
+                if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
+                if video_description: st.markdown(f" {video_description}")
+
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+    else:
+        st.error("Please enter a valid YouTube video URL.")

@@ -4,8 +4,6 @@ from youtube_transcript_api.formatters import TextFormatter
 from yt_dlp import YoutubeDL
 import re
 from openai import OpenAI
-import clipboard
-
 
 OPENROUTER_API_KEY =st.secrets["api_key"]
 
@@ -20,9 +18,6 @@ st.set_page_config(
 )
 
 transcript_extracted = False
-
-def on_copy_click(text):
-    clipboard.copy(text)
     
 def extract_video_id(video_url: str) -> str:
     pattern = r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})'

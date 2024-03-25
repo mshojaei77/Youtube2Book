@@ -65,7 +65,9 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
   - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). 
   - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
     ''' 
-  response = requests.post(
+
+    OPENROUTER_API_KEY =st.secrets["OPENROUTER_API_KEY"]
+    response = requests.post(
     url="https://openrouter.ai/api/v1/chat/completions",
     headers={
       "Authorization": f"Bearer {OPENROUTER_API_KEY}",

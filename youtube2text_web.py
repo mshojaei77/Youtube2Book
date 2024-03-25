@@ -3,7 +3,6 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from yt_dlp import YoutubeDL
 import re
-import g4f
 import time
 import requests
 import json

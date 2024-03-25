@@ -107,6 +107,8 @@ method = st.radio(
     "Choose the Extraction method",
     ["Simple", "Mistral",":rainbow[GPT-4]"],
     captions = ["Base Transcript", "Enhance with Mistral AI (free)", "Enhance With GPT-4 (api key required)"])
+if method == ':rainbow[GPT-4]':
+    OPENAI_API_KEY = st.text_input('OpenAI api key')
 submit_button = st.button("Extract Transcript")
 
 
@@ -131,7 +133,6 @@ if submit_button and video_url_input:
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
-                OPENAI_API_KEY = st.text_input('OpenAI api key')
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
                     st.markdown(structured_transcript)

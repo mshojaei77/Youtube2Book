@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="YouTube Smart Transcription",
     page_icon="🎥",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
     menu_items={
         'Get Help': 'https://twitter.com/realshojaei',
         'Report a bug': "https://github.com/mshojaei77/Youtube2Book/issues",
@@ -141,24 +141,20 @@ if submit_button and video_url_input:
             if method == 'Mistral' and transcript_text:
                 with st.spinner('Structuring Using Mistral 7b ...'):
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
-                    context= "".join(structured_transcript)
-                    st.button("copy to clipboard", on_click=on_copy_click, args=(context,))
+                    if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
-                    context= "".join(structured_transcript)
-                    st.button("copy to clipboard", on_click=on_copy_click, args=(context,))
+                    if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
-                context= "".join(transcript_text)
-                st.button("copy to clipboard", on_click=on_copy_click, args=(context,))
+                if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
                 st.markdown(f" {transcript_text} ")
                         
             with st.sidebar:
                 st.markdown(f"## Video Description: ")
                 if video_title: st.markdown(f"### [{video_title}]({video_url})")
-                if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
                 if video_description: st.markdown(f" {video_description}")
 
         except Exception as e:

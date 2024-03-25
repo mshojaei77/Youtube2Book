@@ -5,8 +5,8 @@ from yt_dlp import YoutubeDL
 import re
 import g4f
 import time
-import requests
-import json
+from requests.exceptions import HTTPError
+
 
 # Include the Vazirmatn font via CDN
 st.markdown(
@@ -52,36 +52,57 @@ def get_video_info(video_url: str) -> tuple:
         return title, description, thumbnail_url
 
 def structure_with_ai(transcript_text: str, video_description: str) -> str: 
-  prompt = f'''
-  read following YouTube Video Transcript and rewrite it as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
-  
-  
-  ## Video Description:
-  {video_description}
-  ## Video Transcript:
-  {transcript_text}
-  
-  - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
-  - Make sure all of transcript and video purpose will be covered.
-  - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). 
-  - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
-    ''' 
-  response = requests.post(
-    url="https://openrouter.ai/api/v1/chat/completions",
-    headers={
-      "Authorization": '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',
-      "HTTP-Referer": "https://youtube2text.streamlit.app/", 
-      "X-Title": "YouTube Smart Transcriptor'", 
-    },
-    data=json.dumps({
-      "model": "openrouter/auto	", 
-      "messages": [
-        {"role": "user", "content": prompt}
-      ]
-    })
-  )
-  return response  
+    request = f'''
+read following YouTube Video Transcript and rewrite it as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
 
+
+## Video Description:
+{video_description}
+## Video Transcript:
+{transcript_text}
+
+- Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
+- Make sure all of transcript and video purpose will be covered.
+- Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). 
+- Ensure to correct the transcript text if it contains grammar issues or anything wrong.
+    ''' 
+
+
+
+    providers = [g4f.Provider.FreeChatgpt, g4f.Provider.Liaobots, g4f.Provider.Koala, g4f.Provider.Llama2, g4f.Provider.ChatForAi]
+
+    max_retries = 3
+    backoff_factor = 2
+
+    for prv in providers:
+        retries = 0
+        while retries < max_retries:
+            try:
+                response = g4f.ChatCompletion.create(
+                    model=g4f.models.gpt_4,
+                    provider=prv,
+                    messages=[
+                        {"role": "user", "content": request}
+                    ]
+                )
+                messages = "".join(response)
+                return messages  # Return the response if successful
+            except HTTPError as http_err:
+                if http_err.response.status_code >= 500:  # Retry only on server errors
+                    retries += 1
+                    time.sleep((backoff_factor ** retries) / 10)
+                    st.warning(f"Retry {retries}/{max_retries} for provider {prv} due to server error.")
+                else:
+                    break  # Don't retry on client errors
+            except Exception as e:
+                st.warning(f"Error with provider {prv}: {e}")
+                break  # Break and try the next provider
+        else:
+            st.error(f"Provider {prv} failed after {max_retries} retries.")
+
+    # If all providers fail, display an error message
+    st.error("Failed to structure the transcript with all providers.")
+    return None
 
 
 video_url_input = st.text_input("Enter YouTube Video URL", "")

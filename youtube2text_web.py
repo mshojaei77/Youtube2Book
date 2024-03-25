@@ -5,6 +5,10 @@ from yt_dlp import YoutubeDL
 import re
 from openai import OpenAI
 
+
+
+OPENROUTER_API_KEY =st.secrets["api_key"]
+
 st.markdown(
     """
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.x/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -47,7 +51,7 @@ def get_video_info(video_url: str) -> tuple:
         thumbnail_url = thumbnails[-1]["url"] if thumbnails else None
         return title, description, thumbnail_url
 
-def structure_with_ai(transcript_text: str, video_description: str, api_key: str) -> str:
+def structure_with_mistral(transcript_text: str, video_description: str) -> str:
     prompt = f'''
     rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
 
@@ -64,7 +68,7 @@ def structure_with_ai(transcript_text: str, video_description: str, api_key: str
     '''
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
-        api_key=api_key,
+        api_key=OPENROUTER_API_KEY,
     )
     completion = client.chat.completions.create(
             model="mistralai/mistral-7b-instruct:free",
@@ -72,18 +76,46 @@ def structure_with_ai(transcript_text: str, video_description: str, api_key: str
         )
     return completion.choices[0].message.content
 
+def structure_with_gpt(transcript_text: str, video_description: str, api_key: str) -> str:
+    prompt = f'''
+    rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
+
+        here is the **Video Transcript**:
+        """{transcript_text}"""
+    
+        here is the **Video Description**:
+        {video_description}
+
+    - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
+    - Make sure all of transcript and video purpose will be covered.
+    - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
+    - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
+    '''
+    client = OpenAI(
+        api_key=api_key,
+    )
+    completion = client.chat.completions.create(
+            model="gpt-4-0125-preview",
+            messages=[{ "role": "user", "content": prompt}]
+        )
+    return completion.choices[0].message.content
 
 
 
-video_url_input = st.text_input("Enter YouTube Video URL", "")
-structure_with_ai_checkbox = st.checkbox("✨Enhance with AI")
+video_url_input = st.text_input("Enter YouTube Video URL")
+method = st.radio(
+    "Choose the Extraction method",
+    ["Simple", "Mistral",":rainbow[GPT-4]"],
+    captions = ["Base Transcript", "Enhance with Mistral AI (free)", "Enhance With GPT-4 (api key required)"])
 submit_button = st.button("Extract Transcript")
 
 
     
+
+    
+
 if submit_button and video_url_input:
     video_id = extract_video_id(video_url_input)
-
     if video_id:
         try:
             video_title, video_description, video_thumbnail = get_video_info(video_url_input)
@@ -94,13 +126,16 @@ if submit_button and video_url_input:
                 if transcript_text:
                     transcript_extracted = True
 
-            if structure_with_ai_checkbox and transcript_text:
+            if method == 'Mistral' and transcript_text:
+                with st.spinner('Structuring Using Mistral 7b ...'):
+                    structured_transcript = structure_with_mistral(transcript_text, video_description)
+                    st.markdown(structured_transcript)
+            if method == ':rainbow[GPT-4]':
                 OPENAI_API_KEY = st.text_input('OpenAI api key')
-                if OPENAI_API_KEY:
-                    with st.spinner('Structuring Using AI...'):
-                        structured_transcript = structure_with_ai(transcript_text, video_description,OPENAI_API_KEY)
-                        st.markdown(structured_transcript)
-            else:
+                with st.spinner('Structuring Using GPT-4 ...'):
+                    structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
+                    st.markdown(structured_transcript)
+            if method == 'Simple' and transcript_text:
                 if video_title: st.markdown(f"## {video_title}")
                 st.markdown(f" {transcript_text} ")
                         

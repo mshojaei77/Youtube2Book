@@ -52,37 +52,37 @@ def get_video_info(video_url: str) -> tuple:
         thumbnail_url = thumbnails[-1]["url"] if thumbnails else None
         return title, description, thumbnail_url
 
-def structure_with_ai(transcript_text: str, video_description: str) -> str: 
-  prompt = f'''
-  read following YouTube Video Transcript and rewrite it as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
+def structure_with_ai(transcript_text: str, video_description: str) -> str:
+    prompt = f'''
+  rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
+
+    here is the **Video Transcript**:
+    """{transcript_text}"""
   
-  
-  ## Video Description:
-  {video_description}
-  ## Video Transcript:
-  {transcript_text}
-  
+    here is the **Video Description**:
+    {video_description}
+
   - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
   - Make sure all of transcript and video purpose will be covered.
-  - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section). 
+  - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
   - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
-    ''' 
-    
+'''
+
     response = requests.post(
-    url="https://openrouter.ai/api/v1/chat/completions",
-    headers={
-      "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-      "HTTP-Referer": "https://youtube2text.streamlit.app/", 
-      "X-Title": "YouTube Smart Transcriptor'", 
-    },
-    data=json.dumps({
-      "model": "openrouter/auto	", 
-      "messages": [
-        {"role": "user", "content": prompt}
-      ]
-    })
-  )
-  return response  
+        url="https://openrouter.ai/api/v1/chat/completions",
+        headers={
+          "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+          "HTTP-Referer": "https://youtube2text.streamlit.app/",
+          "X-Title": "YouTube Smart Transcriptor'",
+        },
+        data=json.dumps({
+          "model": "openrouter/auto	",
+          "messages": [
+            {"role": "user", "content": prompt}
+          ]
+        })
+      )
+    return response
 
 
 

@@ -7,7 +7,7 @@ from openai import OpenAI
 
 
 
-OPENROUTER_API_KEY =st.secrets["api_key "]
+OPENROUTER_API_KEY =st.secrets["api_key"]
 
 st.markdown(
     """

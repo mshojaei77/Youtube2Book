@@ -12,8 +12,8 @@ OPENROUTER_API_KEY =st.secrets["api_key"]
 st.set_page_config(
     page_title="YouTube Smart Transcription",
     page_icon="🎥",
-    layout="wide",
-    initial_sidebar_state="collapsed",
+    layout="centered",
+    initial_sidebar_state="expanded",
     menu_items={
         'Get Help': 'https://twitter.com/realshojaei',
         'Report a bug': "https://github.com/mshojaei77/Youtube2Book/issues",
@@ -141,14 +141,20 @@ if submit_button and video_url_input:
             if method == 'Mistral' and transcript_text:
                 with st.spinner('Structuring Using Mistral 7b ...'):
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
+                    st.divider()
+                    if video_title: st.markdown(video_title)
                     if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
+                    st.divider()
+                    if video_title: st.markdown(video_title)
                     if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
+                st.divider()
+                if video_title: st.markdown(video_title)
                 if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
                 st.markdown(f" {transcript_text} ")
                         

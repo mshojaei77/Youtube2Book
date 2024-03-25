@@ -71,13 +71,10 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
         api_key=OPENROUTER_API_KEY,
     )
     completion = client.chat.completions.create(
-            model="openrouter/auto",
+            model="nousresearch/nous-capybara-7b:free",
             messages=[{ "role": "user", "content": prompt}]
         )
-    if completion.choices[0].message.content == None:
-        return completion
-    else:
-        return completion.choices[0].message.content
+    return completion.choices[0].message.content
 
 
 

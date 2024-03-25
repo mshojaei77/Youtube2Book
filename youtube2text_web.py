@@ -66,20 +66,13 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
     - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
     - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
     '''
-    # gets API Key from environment variable OPENAI_API_KEY
     client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=OPENROUTER_API_KEY,
     )
-
     completion = client.chat.completions.create(
     model="openrouter/auto",
-    messages=[
-        {
-        "role": "user",
-        "content":prompt,
-        },
-    ],
+    messages=[{ "role": "user", "content": prompt}]
     )
     result = completion.choices[0].message.content
     return result
@@ -106,7 +99,7 @@ if submit_button and video_url_input:
                     transcript_extracted = True
 
             if structure_with_ai_checkbox and transcript_text:
-                with st.spinner('Structuring Using AI... (may take a while)'):
+                with st.spinner('Structuring Using AI...'):
                     structured_transcript = structure_with_ai(transcript_text, video_description)
                     st.markdown(structured_transcript)
             else:

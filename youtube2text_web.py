@@ -4,22 +4,32 @@ from youtube_transcript_api.formatters import TextFormatter
 from yt_dlp import YoutubeDL
 import re
 from openai import OpenAI
-
+import clipboard
 
 
 OPENROUTER_API_KEY =st.secrets["api_key"]
 
-st.markdown(
-    """
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.x/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    """,
-    unsafe_allow_html=True
+st.set_page_config(
+    page_title="YouTube Smart Transcription",
+    page_icon="🎥",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://twitter.com/realshojaei',
+        'Report a bug': "https://github.com/mshojaei77/Youtube2Book/issues",
+    }
 )
+st.title('🎥 YouTube Smart Transcription')
 
-st.title('🎥 YouTube Smart Transcriptor')
+
+
+
 
 transcript_extracted = False
 
+def on_copy_click(text):
+    clipboard.copy(text)
+    
 def extract_video_id(video_url: str) -> str:
     pattern = r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})'
     match = re.search(pattern, video_url)
@@ -131,13 +141,15 @@ if submit_button and video_url_input:
             if method == 'Mistral' and transcript_text:
                 with st.spinner('Structuring Using Mistral 7b ...'):
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
+                    st.button("copy to clipboard", on_click=on_copy_click, args=(structured_transcript))
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
+                    st.button("copy to clipboard", on_click=on_copy_click, args=(structured_transcript))
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
-                if video_title: st.markdown(f"## {video_title}")
+                st.button("copy to clipboard", on_click=on_copy_click, args=(structured_transcript))
                 st.markdown(f" {transcript_text} ")
                         
             with st.sidebar:
@@ -145,7 +157,6 @@ if submit_button and video_url_input:
                 if video_title: st.markdown(f"### [{video_title}]({video_url})")
                 if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
                 if video_description: st.markdown(f" {video_description}")
-
 
         except Exception as e:
             st.error(f"An error occurred: {e}")

@@ -74,10 +74,10 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
             model="openrouter/auto",
             messages=[{ "role": "user", "content": prompt}]
         )
-    if completion.choices[0].message.content:
-        return completion.choices[0].message.content
+    if completion.choices[0].message.content == None:
+        return completion
     else:
-        return completion.error.message
+        return completion.choices[0].message.content
 
 
 

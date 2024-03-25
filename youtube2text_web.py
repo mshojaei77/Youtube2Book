@@ -106,7 +106,7 @@ def structure_with_gpt(transcript_text: str, video_description: str, api_key: st
 
 
 with st.sidebar:
-  st.title('🎥 YouTube Smart Transcription')
+  st.header('🎥 YouTube :blue[Smart] Transcription')
   video_url_input = st.text_input("Enter YouTube Video URL")
   method = st.radio(
       "Choose the Extraction method",
@@ -136,20 +136,17 @@ if submit_button and video_url_input:
             if method == 'Mistral' and transcript_text:
                 with st.spinner('Structuring Using Mistral 7b ...'):
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
-                    st.divider()
                     if video_title: st.markdown(f"## {video_title}")
                     if video_thumbnail: st.image(video_thumbnail, width=600)
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
-                    st.divider()
                     if video_title: st.markdown(f"## {video_title}")
                     if video_thumbnail: st.image(video_thumbnail, width=600)
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
-                st.divider()
-                if video_title: st.title(video_title)
+                if video_title: st.header(video_title, divider='rainbow')
                 if video_thumbnail: st.image(video_thumbnail, width=600)
                 st.markdown(f" {transcript_text} ")
                       

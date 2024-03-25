@@ -111,15 +111,15 @@ def structure_with_gpt(transcript_text: str, video_description: str, api_key: st
     return completion.choices[0].message.content
 
 
-
-video_url_input = st.text_input("Enter YouTube Video URL")
-method = st.radio(
-    "Choose the Extraction method",
-    ["Simple", "Mistral",":rainbow[GPT-4]"],
-    captions = ["Base Transcript", "Enhance with Mistral AI (free)", "Enhance With GPT-4 (api key required)"])
-if method == ':rainbow[GPT-4]':
-    OPENAI_API_KEY = st.text_input('OpenAI api key')
-submit_button = st.button("Extract Transcript")
+with st.sidebar:
+  video_url_input = st.text_input("Enter YouTube Video URL")
+  method = st.radio(
+      "Choose the Extraction method",
+      ["Simple", "Mistral",":rainbow[GPT-4]"],
+      captions = ["Base Transcript", "Enhance with Mistral AI (free)", "Enhance With GPT-4 (api key required)"])
+  if method == ':rainbow[GPT-4]':
+      OPENAI_API_KEY = st.text_input('OpenAI api key')
+  submit_button = st.button("Extract Transcript")
 
 
     
@@ -155,16 +155,9 @@ if submit_button and video_url_input:
             if method == 'Simple' and transcript_text:
                 st.divider()
                 if video_title: st.markdown(f"## {video_title}")
-                col1, col2, col3 = st.columns(3)
-                with col2:
-                    if video_thumbnail: st.image(video_thumbnail, width=600)
+                if video_thumbnail: st.image(video_thumbnail, width=600)
                 st.markdown(f" {transcript_text} ")
-                        
-            with st.sidebar:
-                st.markdown(f"## Video Description: ")
-                if video_title: st.markdown(f"### [{video_title}]({video_url})")
-                if video_description: st.markdown(f" {video_description}")
-
+                      
         except Exception as e:
             st.error(f"An error occurred: {e}")
     else:

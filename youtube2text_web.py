@@ -79,7 +79,7 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
             messages=[{ "role": "user", "content": prompt}]
         )
 
-        if completion.choices[0].message.conten:
+        if completion.choices[0].message.content:
             return result
         else:
             print("No respond from AI.")

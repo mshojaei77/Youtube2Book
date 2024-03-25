@@ -108,8 +108,9 @@ if submit_button and video_url_input:
             if structure_with_ai_checkbox and transcript_text:
                 with st.spinner('Structuring Using AI... (may take a while)'):
                     structured_transcript = structure_with_ai(transcript_text, video_description)
-                    structured_bytes = structured_transcript.encode('utf-8')
+                    
                     with st.sidebar:
+                        structured_bytes = structured_transcript.encode('utf-8')
                         st.download_button(
                             label="Download Enhanced Transcript",
                             data=structured_bytes,

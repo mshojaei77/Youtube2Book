@@ -128,13 +128,13 @@ if submit_button and video_url_input:
                 with st.spinner('Structuring Using Mistral 7b ...'):
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
                     if video_title: st.header(video_title, divider='rainbow')
-                    if video_thumbnail: st.image(video_thumbnail, width=600)
+                    if video_thumbnail: st.image(video_thumbnail, use_column_width="auto")
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
                     if video_title: st.header(video_title, divider='rainbow')
-                    if video_thumbnail: st.image(video_thumbnail, width=600)
+                    if video_thumbnail: st.image(video_thumbnail, use_column_width="auto")
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
                 if video_title: st.header(video_title, divider='rainbow')

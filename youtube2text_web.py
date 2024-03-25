@@ -12,7 +12,7 @@ OPENROUTER_API_KEY =st.secrets["api_key"]
 st.set_page_config(
     page_title="YouTube Smart Transcription",
     page_icon="🎥",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="collapsed",
     menu_items={
         'Get Help': 'https://twitter.com/realshojaei',

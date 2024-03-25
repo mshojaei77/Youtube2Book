@@ -3,16 +3,19 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from yt_dlp import YoutubeDL
 import re
+import g4f
+import time
+from requests.exceptions import HTTPError
 
 # Include the Vazirmatn font via CDN
 st.markdown(
     """
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.x/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     """,
     unsafe_allow_html=True
 )
 
-st.title('🎥 YouTube Smart Transcript ')
+st.title('🎥 YouTube Transcript Extractor')
 
 transcript_extracted = False
 
@@ -68,8 +71,6 @@ read following YouTube Video Transcript and explain it to me in engaging tone, f
 - the final output most be a clean and engaging Markdown.
     ''' 
 
-
-
     providers = [g4f.Provider.FreeChatgpt, g4f.Provider.Liaobots, g4f.Provider.Koala, g4f.Provider.Llama2, g4f.Provider.ChatForAi]
 
     max_retries = 3
@@ -103,62 +104,3 @@ read following YouTube Video Transcript and explain it to me in engaging tone, f
 
     # If all providers fail, display an error message
     st.error("Failed to structure the transcript with all providers.")
-    return None
-
-
-# Custom layout with columns
-col1, col2 = st.beta_columns(2)
-with col1:
-    video_url_input = st.text_input("Enter YouTube Video URL", value="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-    structure_with_ai_checkbox = st.checkbox("✨ Enhance with AI ")
-    submit_button = st.button("Extract Transcript")
-
-with col2:
-    # Additional UI elements can be placed here
-    pass
-
-if submit_button and video_url_input:
-    video_id = extract_video_id(video_url_input)
-
-    if video_id:
-        try:
-            video_title, video_description, video_thumbnail = get_video_info(video_url_input)
-            video_url = f"https://www.youtube.com/watch?v={video_id}"
-
-            with st.spinner('Fetching transcript...'):
-                transcript_text = fetch_transcript(video_id)
-                if transcript_text:
-                    transcript_extracted = True
-
-            if structure_with_ai_checkbox and transcript_text:
-                with st.spinner('Structuring Using AI... (may take a while)'):
-                    structured_transcript = structure_with_ai(transcript_text, video_description)
-                    structured_bytes = structured_transcript.encode('utf-8')
-                    st.download_button(
-                        label="Download Structure Transcript",
-                        data=structured_bytes,
-                        file_name='Markdown.txt',
-                        mime='text/plain',
-                    )
-                    st.markdown(structured_transcript)
-            else:
-                if video_title: st.markdown(f"## {video_title}")
-                st.markdown(f" {transcript_text} ")
-                        
-            with st.sidebar:
-                transcript_bytes = transcript_text.encode('utf-8')
-                st.download_button(
-                        label="Download Base Transcript",
-                        data=transcript_bytes,
-                        file_name='Transcript.txt',
-                        mime='text/plain',
-                )
-                st.markdown(f"## Video Information: ")
-                if video_title: st.markdown(f"### [{video_title}]({video_url})")
-                if video_thumbnail: st.image(video_thumbnail, use_column_width=True)
-                if video_description: st.markdown(f" {video_description}")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-    else:
-        st.error("Please enter a valid YouTube video URL.")

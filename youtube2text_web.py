@@ -10,7 +10,7 @@ import clipboard
 OPENROUTER_API_KEY =st.secrets["api_key"]
 
 st.set_page_config(
-    page_title="Smart Transcription",
+    page_title="YouTube Smart Transcription",
     page_icon="🎥",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -141,15 +141,15 @@ if submit_button and video_url_input:
             if method == 'Mistral' and transcript_text:
                 with st.spinner('Structuring Using Mistral 7b ...'):
                     structured_transcript = structure_with_mistral(transcript_text, video_description)
-                    st.button("copy to clipboard", on_click=on_copy_click, args=(structured_transcript))
+                    st.button("copy to clipboard", on_click=on_copy_click, args=(str(structured_transcript)))
                     st.markdown(structured_transcript)
             if method == ':rainbow[GPT-4]':
                 with st.spinner('Structuring Using GPT-4 ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
-                    st.button("copy to clipboard", on_click=on_copy_click, args=(structured_transcript))
+                    st.button("copy to clipboard", on_click=on_copy_click, args=(str(structured_transcript)))
                     st.markdown(structured_transcript)
             if method == 'Simple' and transcript_text:
-                st.button("copy to clipboard", on_click=on_copy_click, args=(structured_transcript))
+                st.button("copy to clipboard", on_click=on_copy_click, args=(str(transcript_text)))
                 st.markdown(f" {transcript_text} ")
                         
             with st.sidebar:

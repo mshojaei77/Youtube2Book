@@ -4,7 +4,6 @@ primaryColor = "#2196f3"
 backgroundColor = "#121212"
 secondaryBackgroundColor = "#1e1e1e"
 textColor = "#ffffff"
-font = "Roboto"
 
 [custom]
 customCSS = """

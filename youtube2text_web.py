@@ -78,12 +78,11 @@ def structure_with_ai(transcript_text: str, video_description: str) -> str:
             model="openrouter/auto",
             messages=[{ "role": "user", "content": prompt}]
         )
-        
-        if completion is None:
-            print("Completion is None. Check your model and messages.")
-        else:
-            result = completion.choices[0].message.content
+
+        if completion.choices[0].message.conten:
             return result
+        else:
+            print("No respond from AI.")
 
 
 

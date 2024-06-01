@@ -4,8 +4,38 @@ from youtube_transcript_api.formatters import TextFormatter
 from yt_dlp import YoutubeDL
 import re
 from openai import OpenAI
+from groq import Groq
 
-OPENROUTER_API_KEY =st.secrets["api_key"]
+FREE_API_KEY =st.secrets["api_key"]
+sys_prompt =  '''
+            You are an AI assistant tasked with taking video transcripts and structuring them into formatted blog posts. Your goal is to take the raw text from a video transcript and transform it into a well-organized, engaging blog post.
+            When given a video transcript, you should perform the following steps:
+            1. Review the full transcript and identify the key topics, themes, and main points covered in the video.
+            2. Organize the transcript content into a logical structure for the blog post, including an introduction, body paragraphs, and conclusion. Group related points together into cohesive sections.
+            3. Write concise topic sentences and transitions to guide the reader through the blog post flow.
+            4. Add section headings, subheadings, and formatting (e.g. bold, italics, bullet lists) to make the content easy to scan and digest.
+            5. Condense verbose or repetitive transcript phrasing into more concise, polished writing.
+            6. Incorporate relevant images, screenshots, or other visual elements from the video to supplement the written content.
+            7. Proofread the full blog post to ensure it is free of grammar, spelling, and punctuation errors.
+            8. Provide a title for the blog post that captures the main topic in an engaging way.
+            The final blog post should be between 500-800 words, with a clear and cohesive structure that transforms the raw video transcript into an informative and compelling read. Your writing style should be conversational yet authoritative, matching the tone and level of the original video content.
+            Please let me know if you have any other questions! I'm happy to provide further details or examples to help guide your work.
+    '''
+prompt = '''
+            rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
+
+                here is the **Video Transcript**:
+                """{transcript_text}"""
+            
+                here is the **Video Description**:
+                {video_description}
+
+            - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
+            - Make sure all of transcript and video purpose will be covered.
+            - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
+            - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
+    '''
+
 
 st.set_page_config(
     page_title="Smart Transcription",
@@ -50,52 +80,24 @@ def get_video_info(video_url: str) -> tuple:
         thumbnail_url = thumbnails[-1]["url"] if thumbnails else None
         return title, description, thumbnail_url
 
-def structure_with_mistral(transcript_text: str, video_description: str) -> str:
-    prompt = f'''
-    rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
-
-        here is the **Video Transcript**:
-        """{transcript_text}"""
-    
-        here is the **Video Description**:
-        {video_description}
-
-    - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
-    - Make sure all of transcript and video purpose will be covered.
-    - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
-    - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
-    '''
-    client = OpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key=OPENROUTER_API_KEY,
-    )
+def structure_free(transcript_text: str, video_description: str) -> str:
+    client = Groq(api_key=FREE_API_KEY)
     completion = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct:free",
-            messages=[{ "role": "user", "content": prompt}]
-        )
+                messages=[{"role": "system", "content": sys_prompt},
+                    {"role": "user", "content": prompt.format(transcript_text,video_description)}],
+                model="llama3-70b-8192",
+            )
     return completion.choices[0].message.content
 
 def structure_with_gpt(transcript_text: str, video_description: str, api_key: str) -> str:
-    prompt = f'''
-    rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
-
-        here is the **Video Transcript**:
-        """{transcript_text}"""
-    
-        here is the **Video Description**:
-        {video_description}
-
-    - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
-    - Make sure all of transcript and video purpose will be covered.
-    - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
-    - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
-    '''
     client = OpenAI(
         api_key=api_key,
     )
     completion = client.chat.completions.create(
-            model="gpt-4-0125-preview",
-            messages=[{ "role": "user", "content": prompt}]
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": sys_prompt},
+                { "role": "user", "content": prompt.format(transcript_text,video_description)}]
         )
     return completion.choices[0].message.content
 
@@ -105,9 +107,9 @@ with st.sidebar:
   video_url_input = st.text_input("Enter YouTube Video URL")
   method = st.radio(
       "Choose the Extraction method",
-      ["Simple", "Mistral",":rainbow[GPT-4]"],
-      captions = ["Base Transcript", "Enhance with Mistral AI (free)", "Enhance With GPT-4 (api key required)"])
-  if method == ':rainbow[GPT-4]':
+      ["Simple", "Mistral",":rainbow[GPT-4o]"],
+      captions = ["Base Transcript", "Enhance with Mistral AI (free)", "Enhance With GPT-4o (api key required)"])
+  if method == ':rainbow[GPT-4o]':
       OPENAI_API_KEY = st.text_input('OpenAI api key')
   submit_button = st.button("Extract Transcript")
 
@@ -126,12 +128,12 @@ if submit_button and video_url_input:
 
             if method == 'Mistral' and transcript_text:
                 with st.spinner('Structuring Using Mistral 7b ...'):
-                    structured_transcript = structure_with_mistral(transcript_text, video_description)
+                    structured_transcript = structure_free(transcript_text, video_description)
                     if video_title: st.header(video_title, divider='rainbow')
                     if video_thumbnail: st.image(video_thumbnail, use_column_width="auto")
                     st.markdown(structured_transcript)
-            if method == ':rainbow[GPT-4]':
-                with st.spinner('Structuring Using GPT-4 ...'):
+            if method == ':rainbow[GPT-4o]':
+                with st.spinner('Structuring Using GPT-4o ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)
                     if video_title: st.header(video_title, divider='rainbow')
                     if video_thumbnail: st.image(video_thumbnail, use_column_width="auto")

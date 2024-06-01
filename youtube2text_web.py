@@ -91,7 +91,7 @@ def structure_free(transcript_text: str, video_description: str) -> str:
                 )
         return completion.choices[0].message.content
     except Exception as e :
-        return f"The free version in **limited** , try again after 1 minute or use **GPT-4o**"
+        return None
 
 def structure_with_gpt(transcript_text: str, video_description: str, api_key: str) -> str:
     prompt = f'''
@@ -121,7 +121,7 @@ with st.sidebar:
   method = st.radio(
       "Choose the Extraction method",
       ["Simple", "Llama",":rainbow[GPT-4o]"],
-      captions = ["Base Transcript", "Enhance with Llama 3 (Limited)", "Enhance With GPT-4o (API key required)"])
+      captions = ["Base Transcript", "Enhance with Llama 3", "Enhance With GPT-4o (api key required)"])
   if method == ':rainbow[GPT-4o]':
       OPENAI_API_KEY = st.text_input('OpenAI api key')
   submit_button = st.button("Extract Transcript")
@@ -144,7 +144,10 @@ if submit_button and video_url_input:
                     structured_transcript = structure_free(transcript_text, video_description)
                     if video_title and  structured_transcript: st.header(video_title, divider='rainbow')
                     if video_thumbnail and  structured_transcript: st.image(video_thumbnail, use_column_width="auto")
-                    st.markdown(structured_transcript)
+                    if structured_transcript:
+                        st.markdown(structured_transcript)
+                    else:
+                        st.markdown("The free version in **limited** , try again after 1 minute or use **GPT-4o**")
             if method == ':rainbow[GPT-4o]':
                 with st.spinner('Structuring Using GPT-4o ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)

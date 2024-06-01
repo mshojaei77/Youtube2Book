@@ -147,7 +147,7 @@ if submit_button and video_url_input:
                     if structured_transcript:
                         st.markdown(structured_transcript)
                     else:
-                        st.markdown("The free version in **limited** , try again after 1 minute or use **GPT-4o**")
+                        st.markdown("The free version is **limited** , try again after 1 minute or use **GPT-4o** \n __Groq Rate Limit__")
             if method == ':rainbow[GPT-4o]':
                 with st.spinner('Structuring Using GPT-4o ...'):
                     structured_transcript = structure_with_gpt(transcript_text, video_description,OPENAI_API_KEY)

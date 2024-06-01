@@ -91,7 +91,7 @@ def structure_free(transcript_text: str, video_description: str) -> str:
                 )
         return completion.choices[0].message.content
     except Exception as e :
-        return f"The free version in **limited** , try again after 1 minute or use **GPT-4o** \n {e}"
+        return f"The free version in **limited** , try again after 1 minute or use **GPT-4o**"
 
 def structure_with_gpt(transcript_text: str, video_description: str, api_key: str) -> str:
     prompt = f'''

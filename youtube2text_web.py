@@ -68,27 +68,30 @@ def get_video_info(video_url: str) -> tuple:
         return title, description, thumbnail_url
 
 def structure_free(transcript_text: str, video_description: str) -> str:
-    prompt = f'''
-            rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
+    try:
+        prompt = f'''
+                rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
 
-                here is the **Video Transcript**:
-                """{transcript_text}"""
-            
-                here is the **Video Description**:
-                {video_description}
+                    here is the **Video Transcript**:
+                    """{transcript_text}"""
+                
+                    here is the **Video Description**:
+                    {video_description}
 
-            - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
-            - Make sure all of transcript and video purpose will be covered.
-            - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
-            - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
-    '''
-    client = Groq(api_key=FREE_API_KEY)
-    completion = client.chat.completions.create(
-                messages=[{"role": "system", "content": sys_prompt},
-                    {"role": "user", "content": prompt}],
-                model="llama3-70b-8192",
-            )
-    return completion.choices[0].message.content
+                - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
+                - Make sure all of transcript and video purpose will be covered.
+                - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
+                - Ensure to correct the transcript text if it contains grammar issues or anything wrong.
+        '''
+        client = Groq(api_key=FREE_API_KEY)
+        completion = client.chat.completions.create(
+                    messages=[{"role": "system", "content": sys_prompt},
+                        {"role": "user", "content": prompt}],
+                    model="llama3-70b-8192",
+                )
+        return completion.choices[0].message.content
+    except Exception as e :
+        return f"The free version in **limited** , try again after 1 minute or use **GPT-4o** \n {e}"
 
 def structure_with_gpt(transcript_text: str, video_description: str, api_key: str) -> str:
     prompt = f'''

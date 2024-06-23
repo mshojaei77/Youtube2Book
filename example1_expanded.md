@@ -1,4 +1,4 @@
-# Bustling Intro to Large Language Models (LLMs)
+# Intro to Large Language Models (LLMs)
 ![image](https://github.com/mshojaei77/Youtube2Book/assets/76538971/817284a5-3026-4974-8419-b41128387f54)
 
 Hi everyone! Recently, I delivered a 30-minute talk on large language models (LLMs). It wasn't recorded, but given the tremendous positive feedback, I decided to re-record the talk and share it on YouTube. Here, I present to you a comprehensive and engaging outline of that talk for a more general audience, no programming experience necessary.

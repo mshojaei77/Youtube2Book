@@ -207,7 +207,7 @@ if submit_button and video_url_input:
             if method == 'Simple' and transcript_text:
                 if video_title: st.header(video_title, divider='rainbow')
                 if video_thumbnail: st.image(video_thumbnail,use_column_width="auto",)
-                st.markdown(str(transcript_text))
+                st.markdown(str(transcript_text.replace("/n"," ")))
                 st.sidebar.download_button(label="Download Text",data=transcript_text,file_name=f"{video_title}.txt",mime="application/txt")
 
 

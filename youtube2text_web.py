@@ -249,6 +249,9 @@ if submit_button and video_url_input:
                     if video_thumbnail and  structured_transcript: st.image(video_thumbnail, use_column_width="auto")
                     if structured_transcript:
                         st.markdown(structured_transcript)
+                        pdf_buffer = markdown_to_pdf(structured_transcript)
+                        st.sidebar.download_button(label="Download PDF",data=pdf_buffer,file_name=f"{video_title}.pdf",mime="application/pdf")
+
                     else:
                         st.markdown("The free version is **limited** , try again after 1 minute or use **GPT-4o** \n __Groq Rate Limit__")
             if method == ':rainbow[GPT-4o]':
@@ -257,6 +260,9 @@ if submit_button and video_url_input:
                     if video_title: st.header(video_title, divider='rainbow')
                     if video_thumbnail: st.image(video_thumbnail, use_column_width="auto")
                     st.markdown(structured_transcript)
+                    pdf_buffer = markdown_to_pdf(structured_transcript)
+                    st.sidebar.download_button(label="Download PDF",data=pdf_buffer,file_name=f"{video_title}.pdf",mime="application/pdf")
+
 
            
             if method == 'Simple' and transcript_text:
@@ -264,7 +270,7 @@ if submit_button and video_url_input:
                 if video_thumbnail: st.image(video_thumbnail,use_column_width="auto",)
                 st.markdown(f" {transcript_text} ")
                 pdf_buffer = markdown_to_pdf(transcript_text)
-                st.sidebar.download_button(label="Download PDF",data=pdf_buffer,file_name="f{video_title}.pdf",mime="application/pdf")
+                st.sidebar.download_button(label="Download PDF",data=pdf_buffer,file_name=f"{video_title}.pdf",mime="application/pdf")
 
                          
         except Exception as e:

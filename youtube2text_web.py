@@ -5,6 +5,11 @@ from yt_dlp import YoutubeDL
 import re
 from openai import OpenAI
 from groq import Groq
+import markdown
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Image
+from io import BytesIO
 
 FREE_API_KEY =st.secrets["api_key"]
 sys_prompt =  '''
@@ -79,7 +84,61 @@ st.set_page_config(
 )
 
 transcript_extracted = False
-    
+
+def markdown_to_pdf(markdown_content):
+    # Parse the Markdown content
+    html_content = markdown.markdown(markdown_content, extensions=['markdown.extensions.extra'])
+
+    # Create a PDF document in memory
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
+
+    # Create a list to hold the flowables
+    story = []
+
+    # Convert HTML to PDF elements
+    from html.parser import HTMLParser
+
+    class HTML2PDFParser(HTMLParser):
+        def handle_starttag(self, tag, attrs):
+            if tag == 'h1':
+                self.current_style = styles['Heading1']
+            elif tag == 'h2':
+                self.current_style = styles['Heading2']
+            elif tag == 'h3':
+                self.current_style = styles['Heading3']
+            elif tag == 'p':
+                self.current_style = styles['Normal']
+            elif tag == 'img':
+                for attr in attrs:
+                    if attr[0] == 'src':
+                        img = Image(attr[1], width=150, height=150)
+                        story.append(img)
+            elif tag == 'ul':
+                self.current_style = styles['Bullet']
+            elif tag == 'li':
+                self.current_style = styles['Bullet']
+
+        def handle_data(self, data):
+            if hasattr(self, 'current_style'):
+                story.append(Paragraph(data.strip(), self.current_style))
+                story.append(Spacer(1, 12))
+
+        def handle_endtag(self, tag):
+            if tag in ['h1', 'h2', 'h3', 'p', 'ul', 'li']:
+                self.current_style = None
+
+    parser = HTML2PDFParser()
+    parser.feed(html_content)
+
+    # Build the PDF
+    doc.build(story)
+
+    # Reset the buffer position
+    buffer.seek(0)
+    return buffer
+   
 def extract_video_id(video_url: str) -> str:
     pattern = r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})'
     match = re.search(pattern, video_url)
@@ -202,7 +261,19 @@ if submit_button and video_url_input:
                 if video_title: st.header(video_title, divider='rainbow')
                 if video_thumbnail: st.image(video_thumbnail,use_column_width="auto",)
                 st.markdown(f" {transcript_text} ")
-                      
+
+            if structured_transcript:
+                if st.sidebar.button("Generate PDF"):
+                        pdf_buffer = markdown_to_pdf(structured_transcript)
+               
+                           # Provide download link
+                        st.download_button(
+                            label="Download PDF",
+                            data=pdf_buffer,
+                            file_name="output.pdf",
+                            mime="application/pdf"
+                        )
+                         
         except Exception as e:
             st.error(f"An error occurred: {e}")
     else:

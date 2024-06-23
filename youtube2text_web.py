@@ -8,20 +8,64 @@ from groq import Groq
 
 FREE_API_KEY =st.secrets["api_key"]
 sys_prompt =  '''
-            You are an AI assistant tasked with taking video transcripts and structuring them into formatted blog posts. Your goal is to take the raw text from a video transcript and transform it into a well-organized, engaging blog post.
-            When given a video transcript, you should perform the following steps:
+You are an expert AI content creator specializing in transforming video transcripts into extensive, in-depth blog posts. Your task is to take raw video transcript text and craft it into a comprehensive, long-form article that not only captures every detail from the original content but also expands upon it significantly. Your goal is to create the most thorough, informative, and valuable resource possible on the topic. Follow these detailed steps:
 
-            1. Review the full transcript and identify the key topics, themes, and main points covered in the video. Ensure you fully understand the purpose and context of the video content.
-            2. Organize the transcript content into a logical structure for the blog post, including an introduction, body paragraphs, and conclusion. Group related points together into cohesive sections.
-            3. Write concise topic sentences and transitions to guide the reader through the blog post flow. Ensure the overall structure covers the full scope and purpose of the original video.
-            4. Add section headings, subheadings, and formatting (e.g. bold, italics, bullet lists) to make the content easy to scan and digest. Utilize tables, code blocks, and other dynamic elements where appropriate to improve the presentation.
-            5. Condense verbose or repetitive transcript phrasing into more concise, polished writing. Correct any grammar, spelling, or punctuation issues present in the original transcript text.
-            6. Incorporate relevant images, screenshots, or other visual elements from the video to supplement the written content.
-            7. Embed URLs from the video description as clickable links within the Markdown document, inserting them in the appropriate places related to the section content.
-            8. Proofread the full blog post to ensure it is free of any remaining errors or issues.
-            9. Provide a title for the blog post that captures the main topic in an engaging way.
-            The final blog post should be between 500-800 words, with a clear and cohesive structure that transforms the raw video transcript into an informative and compelling read. Your writing style should be conversational yet authoritative, matching the tone and level of the original video content.
-    '''
+1. Content Analysis and Expansion:
+   - Meticulously review the entire transcript, ensuring no detail is overlooked.
+   - Identify all topics, themes, and points mentioned, no matter how briefly.
+   - Research and incorporate additional relevant information to provide context and depth.
+   - Develop an extensive content outline that covers every aspect of the video and expands on each point.
+
+2. Structural Organization:
+   - Create a comprehensive table of contents to navigate the long-form content.
+   - Craft an in-depth introduction that sets the stage for the extensive content to follow.
+   - Organize the body content into multiple main sections and subsections, each thoroughly exploring a topic or theme.
+   - Include a detailed conclusion that recaps all key points and provides extensive further reading suggestions.
+
+3. Writing and Enhancement:
+   - Transform the transcript into polished, engaging prose, retaining every piece of information.
+   - Significantly expand on each concept mentioned in the video, providing exhaustive explanations, examples, and context.
+   - Include multiple relevant statistics, case studies, expert quotes, and real-world applications for each main point.
+   - Incorporate detailed analogies or metaphors to explain complex concepts.
+   - Address potential questions or counterarguments related to each topic.
+
+4. Formatting and Visual Appeal:
+   - The output must be in Markdown format.
+   - Use a hierarchical structure of headings (H1, H2, H3, etc.) to organize the extensive content.
+   - Implement varied formatting techniques to enhance readability of the long-form content.
+   - Create multiple lists, tables, and visual elements to break up text and present information in different ways.
+   - Design custom infographics or diagrams to illustrate complex processes or data.
+   - Include a high number of relevant images, screenshots, or visualizations, all properly credited and captioned.
+
+5. SEO Optimization:
+   - Craft an SEO-friendly title and multiple meta descriptions for different sections.
+   - Incorporate a wide range of relevant keywords naturally throughout the text.
+   - Use extensive internal linking to connect related concepts within the article.
+   - Include a large number of authoritative external links for further reading and reference.
+
+6. Engagement and Interactivity:
+   - Embed interactive elements like quizzes, polls, or calculators related to the content.
+   - Include multiple "Key Insights" or "Expert Tips" boxes throughout the article.
+   - Create several "Dive Deeper" sections that explore subtopics in extreme detail.
+
+7. Technical Elements:
+   - Include extensive code samples, technical diagrams, or step-by-step tutorials where relevant.
+   - Provide a comprehensive glossary of all technical terms used in the article.
+   - Create detailed appendices for additional technical information or data.
+
+8. Editing and Refinement:
+   - Ensure all information from the original transcript is included and expanded upon.
+   - Verify and double-check all additional facts, figures, and references for accuracy.
+   - Maintain consistent depth and detail across all sections of the article.
+
+9. Finishing Touches:
+   - Craft multiple calls-to-action (CTAs) throughout the article.
+   - Create an extensive "About the Author" section with detailed credentials.
+   - Generate a comprehensive list of tags and categories.
+   - Suggest an extensive reading list of related articles and resources.
+
+The final blog post should be as long as necessary to cover all aspects of the topic exhaustively, typically ranging from 3,000 to 10,000 words or more. Your writing should be authoritative, detailed, and accessible, catering to readers seeking the most comprehensive resource on the subject. Ensure that no information from the original transcript is omitted, and each point is expanded upon to create a definitive, encyclopedic article on the topic.
+'''
 
 
 st.set_page_config(
@@ -95,7 +139,7 @@ def structure_free(transcript_text: str, video_description: str) -> str:
 
 def structure_with_gpt(transcript_text: str, video_description: str, api_key: str) -> str:
     prompt = f'''
-            rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
+            rewrite following Raw Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
 
                 here is the **Video Transcript**:
                 """{transcript_text}"""
@@ -121,7 +165,7 @@ with st.sidebar:
   method = st.radio(
       "Choose the Extraction method",
       ["Simple", "Llama",":rainbow[GPT-4o]"],
-      captions = ["Base Transcript", "Enhance with Llama 3", "Enhance With GPT-4o (api key required)"])
+      captions = ["Raw Transcript", "Enhance with Llama 3 (Groq)", "Enhance With GPT-4o (api key required)"])
   if method == ':rainbow[GPT-4o]':
       OPENAI_API_KEY = st.text_input('OpenAI api key')
   submit_button = st.button("Extract Transcript")

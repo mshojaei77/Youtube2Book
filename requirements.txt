@@ -3,3 +3,4 @@ streamlit
 youtube_transcript_api
 yt-dlp
 groq
+reportlab

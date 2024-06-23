@@ -179,7 +179,7 @@ if submit_button and video_url_input:
             video_url = f"https://www.youtube.com/watch?v={video_id}"
 
             with st.spinner('Fetching transcript...'):
-                transcript_text = fetch_transcript(video_id)
+                transcript_text = str(fetch_transcript(video_id)).replace("/n"," ")
                 if transcript_text:
                     transcript_extracted = True
 
@@ -207,7 +207,7 @@ if submit_button and video_url_input:
             if method == 'Simple' and transcript_text:
                 if video_title: st.header(video_title, divider='rainbow')
                 if video_thumbnail: st.image(video_thumbnail,use_column_width="auto",)
-                st.markdown(str(transcript_text.replace("/n"," ")))
+                st.markdown(transcript_text)
                 st.sidebar.download_button(label="Download Text",data=transcript_text,file_name=f"{video_title}.txt",mime="application/txt")
 
 

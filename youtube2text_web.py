@@ -5,9 +5,6 @@ from yt_dlp import YoutubeDL
 import re
 from openai import OpenAI
 from groq import Groq
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
 
 FREE_API_KEY =st.secrets["api_key"]
 sys_prompt =  '''
@@ -82,25 +79,6 @@ st.set_page_config(
 )
 
 transcript_extracted = False
-
-
-
-def markdown_to_pdf(content):
-    content = content.replace('#',' ')
-    pdf_buffer = BytesIO()
-    c = canvas.Canvas(pdf_buffer, pagesize=A4)
-    width, height = A4
-    lines = content.split('\n')
-    y = height - 50
-    for line in lines:
-        c.drawString(50, y, line)
-        y -= 15
-        if y < 50:
-            c.showPage()
-            y = height - 50
-    c.save()
-    pdf_buffer.seek(0)
-    return pdf_buffer
    
 def extract_video_id(video_url: str) -> str:
     pattern = r'(https?://)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})'
@@ -212,8 +190,7 @@ if submit_button and video_url_input:
                     if video_thumbnail and  structured_transcript: st.image(video_thumbnail, use_column_width="auto")
                     if structured_transcript:
                         st.markdown(structured_transcript)
-                        pdf_buffer = markdown_to_pdf(structured_transcript)
-                        st.sidebar.download_button(label="Download PDF",data=pdf_buffer,file_name=f"{video_title}.pdf",mime="application/pdf")
+                        st.sidebar.download_button(label="Download Text",data=structured_transcript,file_name=f"{video_title}.txt",mime="application/txt")
 
                     else:
                         st.markdown("The free version is **limited** , try again after 1 minute or use **GPT-4o** \n __Groq Rate Limit__")
@@ -223,17 +200,16 @@ if submit_button and video_url_input:
                     if video_title: st.header(video_title, divider='rainbow')
                     if video_thumbnail: st.image(video_thumbnail, use_column_width="auto")
                     st.markdown(structured_transcript)
-                    pdf_buffer = markdown_to_pdf(structured_transcript)
-                    st.sidebar.download_button(label="Download PDF",data=pdf_buffer,file_name=f"{video_title}.pdf",mime="application/pdf")
+                    st.sidebar.download_button(label="Download Text",data=structured_transcript,file_name=f"{video_title}.txt",mime="application/txt")
 
 
            
             if method == 'Simple' and transcript_text:
                 if video_title: st.header(video_title, divider='rainbow')
                 if video_thumbnail: st.image(video_thumbnail,use_column_width="auto",)
-                st.markdown(f" {transcript_text} ")
-                pdf_buffer = markdown_to_pdf(transcript_text)
-                st.sidebar.download_button(label="Download PDF",data=pdf_buffer,file_name=f"{video_title}.pdf",mime="application/pdf")
+                st.markdown(str(transcript_text))
+                st.sidebar.download_button(label="Download Text",data=transcript_text,file_name=f"{video_title}.txt",mime="application/txt")
+
 
                          
         except Exception as e:

@@ -10,6 +10,12 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Image
 from io import BytesIO
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from html.parser import HTMLParser
 
 FREE_API_KEY =st.secrets["api_key"]
 sys_prompt =  '''
@@ -85,6 +91,9 @@ st.set_page_config(
 
 transcript_extracted = False
 
+# Register a font if needed
+pdfmetrics.registerFont(TTFont('Vera', 'Vera.ttf'))
+
 def markdown_to_pdf(markdown_content):
     # Parse the Markdown content
     html_content = markdown.markdown(markdown_content, extensions=['markdown.extensions.extra'])
@@ -98,8 +107,6 @@ def markdown_to_pdf(markdown_content):
     story = []
 
     # Convert HTML to PDF elements
-    from html.parser import HTMLParser
-
     class HTML2PDFParser(HTMLParser):
         def handle_starttag(self, tag, attrs):
             if tag == 'h1':
@@ -119,15 +126,29 @@ def markdown_to_pdf(markdown_content):
                 self.current_style = styles['Bullet']
             elif tag == 'li':
                 self.current_style = styles['Bullet']
+            elif tag == 'a':
+                for attr in attrs:
+                    if attr[0] == 'href':
+                        self.current_link = attr[1]
+                        self.current_style = styles['Normal']
+                        self.current_style.textColor = colors.blue
+                        self.current_style.underline = 1
 
         def handle_data(self, data):
             if hasattr(self, 'current_style'):
-                story.append(Paragraph(data.strip(), self.current_style))
+                if hasattr(self, 'current_link'):
+                    story.append(Paragraph(data.strip(), self.current_style, linkText=self.current_link))
+                else:
+                    story.append(Paragraph(data.strip(), self.current_style))
                 story.append(Spacer(1, 12))
 
         def handle_endtag(self, tag):
             if tag in ['h1', 'h2', 'h3', 'p', 'ul', 'li']:
                 self.current_style = None
+            elif tag == 'a':
+                self.current_link = None
+                self.current_style.textColor = colors.black
+                self.current_style.underline = 0
 
     parser = HTML2PDFParser()
     parser.feed(html_content)

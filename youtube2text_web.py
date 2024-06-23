@@ -31,7 +31,8 @@ You are an expert AI content creator specializing in transforming video transcri
 
 4. Formatting and Visual Appeal:
    - The output must be in Markdown format.
-   - Use a hierarchical structure of headings (H1, H2, H3, etc.) to organize the extensive content.
+   - Use a hierarchical structure of headings to organize the extensive content.
+   - If in video_description there was time stamp use it to create hierarchical structure.
    - Implement varied formatting techniques to enhance readability of the long-form content.
    - Create multiple lists, tables, and visual elements to break up text and present information in different ways.
    - Design custom infographics or diagrams to illustrate complex processes or data.
@@ -115,13 +116,13 @@ def structure_free(transcript_text: str, video_description: str) -> str:
     try:
         prompt = f'''
                 rewrite following Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
-
-                    here is the **Video Transcript**:
-                    """{transcript_text}"""
                 
                     here is the **Video Description**:
                     {video_description}
-
+                
+                     here is the **Video Transcript**:
+                      """{transcript_text}"""
+                
                 - Utilize tables, and code blocks where appropriate to improve the presentation and make the content more dynamic.
                 - Make sure all of transcript and video purpose will be covered.
                 - Embed URLs from the video description as clickable links within the Markdown document in right place (related to section).
@@ -141,11 +142,13 @@ def structure_with_gpt(transcript_text: str, video_description: str, api_key: st
     prompt = f'''
             rewrite following Raw Video Transcript as a blog post with engaging tone, format the output using Markdown also embed video description in middle of transcript to understand the video better:
 
-                here is the **Video Transcript**:
-                """{transcript_text}"""
-            
+
                 here is the **Video Description**:
                 {video_description}
+                
+               here is the **Video Transcript**:
+                """{transcript_text}"""
+            
     '''
     client = OpenAI(
         api_key=api_key,

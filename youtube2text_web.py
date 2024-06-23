@@ -5,8 +5,9 @@ from yt_dlp import YoutubeDL
 import re
 from openai import OpenAI
 from groq import Groq
-from markdown2pdf import markdown2pdf
 from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
 
 FREE_API_KEY =st.secrets["api_key"]
 sys_prompt =  '''
@@ -82,12 +83,22 @@ st.set_page_config(
 
 transcript_extracted = False
 
-def markdown_to_pdf(markdown_content):
-    # Convert Markdown to PDF
-    pdf_buffer = BytesIO()
-    markdown2pdf(markdown_content, output=pdf_buffer)
 
-    # Reset the buffer position
+
+def markdown_to_pdf(content):
+    content = content.replace('#',' ')
+    pdf_buffer = BytesIO()
+    c = canvas.Canvas(pdf_buffer, pagesize=A4)
+    width, height = A4
+    lines = content.split('\n')
+    y = height - 50
+    for line in lines:
+        c.drawString(50, y, line)
+        y -= 15
+        if y < 50:
+            c.showPage()
+            y = height - 50
+    c.save()
     pdf_buffer.seek(0)
     return pdf_buffer
    
